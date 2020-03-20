@@ -123,7 +123,8 @@ shopt -s histappend
 # automatically update the bash history
 export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history -n"
 
-# Define go paths
+# Setup gvm and GOPATH
+[[ -s "/home/cenz/.gvm/scripts/gvm" ]] && source "/home/cenz/.gvm/scripts/gvm"
 export GOPATH=$HOME/dev/go
 
 # Export cuda library to be accessible via shell
@@ -164,6 +165,8 @@ alias tnew="tmux new -s"
 alias tdetach="tmux detach"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
 # ---------------------------------- FUNCTIONS ---------------------------------
 
@@ -208,3 +211,4 @@ ssof() {
 ssofmc() {
     mkdir ~/ssof/$1/$2
 }
+
