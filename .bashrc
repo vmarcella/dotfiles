@@ -128,14 +128,14 @@ export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history 
 export GOPATH=$HOME/dev/go
 
 # Export cuda library to be accessible via shell
-export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib64"
 
 #Export the spark home
 export SPARK_HOME=/opt/spark
 
 # Add the new .local/bin folder to the path for user specific data (weird)
 export PATH="$HOME/.custom/scripts:$GOPATH/bin:$GOROOT/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH:$HOME/anaconda3/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin"
-export EDITOR=vim
+export EDITOR=nvim
 export TERM=xterm-256color
 
 # Virtualenvwrapper setup
@@ -176,7 +176,7 @@ vim(){
 	local STTYOPTS="$(stty --save)"
 	stty stop '' -ixoff
 	export TERM=xterm-256color
-	command vim "$@"
+	command nvim "$@"
 	stty "$STTYOPTS"
 }
 
@@ -190,7 +190,7 @@ gi() {
 initgit() {
     git init;
     gi $@ >> .gitignore
-    cp ~/.custom/README.md README.md
+    cp ~/.local/README.md README.md
     cp ~/.custom/LICENSE LICENSE
 }
 
