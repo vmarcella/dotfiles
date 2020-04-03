@@ -1,3 +1,4 @@
 {
-    "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh"
+    "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh",
+    "clangd.arguments": ["--cross-file-rename"]
 }
