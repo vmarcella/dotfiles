@@ -7,8 +7,8 @@ Plug 'scrooloose/nerdtree' " File explorer.
 Plug 'vim-airline/vim-airline' " Status line with buffers shown
 Plug 'jlanzarotta/bufexplorer' " Buffer explorer
 Plug 'airblade/vim-gitgutter' " Shows git diffs in 'gutter'
-" Plug 'Valloric/YouCompleteMe' " Code completion. (Disabled for now)
 Plug 'neoclide/coc.nvim', {'branch':'release'}
+Plug 'ryanoasis/vim-devicons' " Install devicon Install devicons
 Plug 'wakatime/vim-wakatime' " Make sure that I am coding
 Plug 'mattn/emmet-vim' " Provides a nice way to write html
 Plug 'w0rp/ale' " Asyncrhonous linter for all linters
@@ -60,7 +60,7 @@ let g:ale_fix_on_save = 1
 let g:NERDTreeNodeDelimiter = "\u00a0"
 
 " Add colors
-hi link illuminatedWord Visual
+" hi link illuminatedWord Visual
 
 " Add golang linter
 set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
@@ -91,6 +91,8 @@ let g:coc_global_extensions = [
     \ 'coc-yaml'
     \ ]
 
+" Set the color of the floating background.
+hi! CocFloating ctermfg=152 ctermbg=234
 
 set cmdheight=1 " Set the cmd height
 set updatetime=300 " Change the update time.
@@ -192,6 +194,7 @@ set autoread " Set vim to autoread from a file if it's been modified
 set clipboard=unnamedplus " Allows access to the global clipboard
 set foldmethod=syntax  "  Set the fold method to rely on the language
 set nofoldenable " Remove folding
+set encoding=UTF-8 " UTF-8 character encodings
 
 "Go to normal mode and quit once in it
 inoremap <silent> jj <ESC>
@@ -210,15 +213,6 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 "Key mapping for nerdtree
 map <C-N> :NERDTreeToggle %<CR>
 let NERDTreeShowHidden=1
-
-"Add auto closing functionality for vim with just vanilla vim
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O}} } ] )' '" "
 
 set exrc " enable per project configurations
 set secure " disable autocmd to be run from files that arent' owned by me
