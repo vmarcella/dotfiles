@@ -21,8 +21,6 @@ Plug 'tpope/vim-obsession' " Write the current state of vim into a command
 " Plug 'grailbio/bazel-compilation-database' " For working with bazel projects like terrace
 call plug#end() "Init all plugins
 
-" plugin related variables/configs
-
 " Add powerline to vim shell
 let g:airline_powerline_fonts = 1
 
@@ -49,6 +47,7 @@ let g:ale_linters = {
 \'javascript': ['eslint'], 
 \'cpp': ['cpplint']
 \}
+
 let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
 let g:ale_python_autopep8_options = '--aggressive -i'
 let g:ale_cpp_cpplint_options = '--filter=-build/include_subdir, -legal/copyright'
@@ -57,7 +56,7 @@ let g:ale_fix_on_save = 1
 
 " Nerd tree config
 
-let g:NERDTreeNodeDelimiter = "\u00a0"
+" let g:NERDTreeNodeDelimiter = "\u00a0"
 
 " Add colors
 " hi link illuminatedWord Visual
@@ -97,7 +96,7 @@ hi! CocFloating ctermfg=152 ctermbg=234
 set cmdheight=1 " Set the cmd height
 set updatetime=300 " Change the update time.
 
-" Use tab for triggter completion with characters ahead and navigate.
+" Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -148,10 +147,21 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Rename symbols
 nmap <leader>rn <Plug>(coc-rename)
 
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
 " Use <TAB> for selection ranges.
 nmap <silent> <TAB> <Plug>(coc-range-select)
 xmap <silent> <TAB> <Plug>(coc-range-select)
 
+"
 " Mappings using CoCList:
 " Show all diagnostics.
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
@@ -216,6 +226,16 @@ let NERDTreeShowHidden=1
 
 set exrc " enable per project configurations
 set secure " disable autocmd to be run from files that arent' owned by me
+
+" Setup for vim splits. This lets you easily travel between splits.
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Set splits to be default on the bottom and right.
+set splitbelow
+set splitright
 
 " Disable arrow keys.
 map <up> <nop>
