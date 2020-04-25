@@ -123,12 +123,12 @@ shopt -s histappend
 # automatically update the bash history
 export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history -n"
 
-# Setup gvm and GOPATH
-[[ -s "/home/cenz/.gvm/scripts/gvm" ]] && source "/home/cenz/.gvm/scripts/gvm"
-export GOPATH=$HOME/dev/go
-
 # Export cuda library to be accessible via shell
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib64"
+export LD_LIBRARY_PATH="/usr/lib64:/usr/local/cuda/lib64"
+
+# Setup gvm and GOPATH
+source "/home/cenz/.gvm/scripts/gvm"
+export GOPATH=$HOME/dev/go
 
 #Export the spark home
 export SPARK_HOME=/opt/spark
