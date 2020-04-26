@@ -127,8 +127,8 @@ export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history 
 export LD_LIBRARY_PATH="/usr/lib64:/usr/local/cuda/lib64"
 
 # Setup gvm and GOPATH
-source "/home/cenz/.gvm/scripts/gvm"
-export GOPATH=$HOME/dev/go
+export GOPATH="$HOME/dev/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
 
 #Export the spark home
 export SPARK_HOME=/opt/spark
@@ -163,6 +163,8 @@ alias tattach="tmux attach-session -t"
 alias tkill="tmux kill-session -t"
 alias tnew="tmux new -s"
 alias tdetach="tmux detach"
+
+alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
@@ -211,4 +213,3 @@ ssof() {
 ssofmc() {
     mkdir ~/ssof/$1/$2
 }
-
