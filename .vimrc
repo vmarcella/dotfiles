@@ -17,9 +17,8 @@ Plug 'RRethy/vim-illuminate' " Highlight words that match what's under the curso
 Plug 'lilydjwg/colorizer' " Colorize hex color codes
 Plug 'tmux-plugins/vim-tmux-focus-events' " Allow tmux to pass through on and off focus events into vim
 Plug 'tpope/vim-obsession' " Write the current state of vim into a command
-" Re enable when working on terrace
-" Plug 'grailbio/bazel-compilation-database' " For working with bazel projects like terrace
-call plug#end() "Init all plugins
+" Plug 'grailbio/bazel-compilation-database' For working with bazel projects like terrace
+call plug#end() " Init all plugins
 
 " Add powerline to vim shell
 let g:airline_powerline_fonts = 1
