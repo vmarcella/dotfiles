@@ -14,6 +14,8 @@ install_deps() {
         xclip \
         python3-dev \
         python-dev \
+        xorg-dev \
+        libglu1-mesa-dev
         tree
 }
 
@@ -97,7 +99,7 @@ install_grpc_cli() {
     git submodule update --init
     make -j 6 grpc_cli
     mv ./bins/opt/grpc_cli ~/.local/bin/grpc_cli
-    popd
+    popd  # mktemp -d
 }
 
 install_gcloud() {
@@ -109,6 +111,21 @@ install_gcloud() {
 
     # Update the package list and install the Cloud SDK
     sudo apt-get update && sudo apt-get install google-cloud-sdk
+}
+
+install_clangd() {
+    pushd "$(mktemp -d)"
+    wget \
+        https://github.com/clangd/clangd/releases/download/10rc3/clangd-linux-10rc3.zip \
+        -O clangd.zip
+    unzip clangd.zip
+
+    pushd clangd_10rc3
+    mv bin/clangd "$HOME/.local/bin"
+    mv -u lib/clang "$HOME/.local/lib"
+    popd  # clangd_10rc3
+
+    popd  # mktemp -d
 }
 
 install_tools() {
