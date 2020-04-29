@@ -137,6 +137,7 @@ install_tools() {
     install_bazel
     install_grpc_cli
     install_gcloud
+    install_clangd
 }
 
 install() {
