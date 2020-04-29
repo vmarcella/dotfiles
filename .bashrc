@@ -114,7 +114,6 @@ fi
 ### USER ENTERED BASH COMMANDS
 ###
 
-
 # ----------------------------------- EXPORTS ----------------------------------
 
 # set the history to be appended to the end of the bash_history file
@@ -128,7 +127,6 @@ export LD_LIBRARY_PATH="/usr/lib64:/usr/local/cuda/lib64"
 
 # Setup gvm and GOPATH
 export GOPATH="$HOME/dev/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
-
 
 #Export the spark home
 export SPARK_HOME=/opt/spark
