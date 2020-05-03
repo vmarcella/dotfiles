@@ -30,7 +30,11 @@ let g:airline#extensions#tabline#enabled = 1
 " enable rainbow plugin at startup
 let g:rainbow_active=0
 
-" Ale config
+if executable('rg')
+    set grepprg=rg\ --color=never
+    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+    let g:ctrlp_use_caching = 0
+endif
 
 " Setup ale fixers
 " Currently blocked out since it's being a bad boi
