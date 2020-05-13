@@ -1,4 +1,5 @@
 {
     "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh",
-    "clangd.arguments": ["--cross-file-rename"]
+    "clangd.arguments": ["--cross-file-rename"],
+    "omnisharp.useDotnet": true
 }
