@@ -5,6 +5,7 @@ Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder.
 Plug 'sheerun/vim-polyglot' " Better syntax and indentation.
 Plug 'scrooloose/nerdtree' " File explorer.
 Plug 'vim-airline/vim-airline' " Status line with buffers shown
+Plug 'OmniSharp/omnisharp-vim' " Omnisharp
 Plug 'jlanzarotta/bufexplorer' " Buffer explorer
 Plug 'airblade/vim-gitgutter' " Shows git diffs in 'gutter'
 Plug 'neoclide/coc.nvim', {'branch':'release'}
@@ -89,6 +90,7 @@ let g:coc_global_extensions = [
     \ 'coc-clangd',
     \ 'coc-rls',
     \ 'coc-go',
+    \ 'coc-omnisharp',
     \ 'coc-python',
     \ 'coc-spell-checker',
     \ 'coc-yaml'
