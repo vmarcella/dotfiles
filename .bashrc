@@ -202,6 +202,11 @@ updateYCM() {
     cd $CURRENTDIR
 }
 
+# Update the stylus monitor.
+setStylusMonitor() {
+    xsetwacom set "HID 256c:006d Pen stylus" MapToOutput "HEAD-$1"
+}
+
 # Change into note folder
 ssof() {
     cd ~/ssof/$1/$2
