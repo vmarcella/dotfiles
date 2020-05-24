@@ -130,6 +130,10 @@ install_clangd() {
     popd  # mktemp -d
 }
 
+install_heroku() {
+    sudo snap install --classic heroku
+}
+
 install_tools() {
     install_tmux
     install_neovim
