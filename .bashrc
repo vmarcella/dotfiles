@@ -123,7 +123,7 @@ shopt -s histappend
 export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history -n"
 
 # Export cuda library to be accessible via shell
-export LD_LIBRARY_PATH="/usr/lib64:/usr/local/cuda/lib64"
+export LD_LIBRARY_PATH="/usr/local/gcc-10.1.0:/usr/lib:usr/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 
 # Setup gvm and GOPATH
 export GOPATH="$HOME/dev/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
@@ -132,7 +132,7 @@ export GOPATH="$HOME/dev/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bi
 export SPARK_HOME=/opt/spark
 
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.custom/scripts:$GOPATH/bin:$GOROOT/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH:$HOME/anaconda3/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin"
+export PATH="$HOME/.custom/scripts:/usr/local/gcc-10.1.0/bin:$GOPATH/bin:$GOROOT/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH:$HOME/anaconda3/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export EDITOR=nvim
 export TERM=xterm-256color
 

@@ -29,11 +29,11 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 " enable rainbow plugin at startup
-let g:rainbow_active=0
+let g:rainbow_active = 0
 
 if executable('rg')
     set grepprg=rg\ --color=never
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+    let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
     let g:ctrlp_use_caching = 0
 endif
 
@@ -229,6 +229,9 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 "Key mapping for nerdtree
 map <C-N> :NERDTreeToggle %<CR>
 let NERDTreeShowHidden=1
+
+" Disable high lighting.
+nnoremap \\ :noh<return>
 
 set exrc " enable per project configurations
 set secure " disable autocmd to be run from files that arent' owned by me

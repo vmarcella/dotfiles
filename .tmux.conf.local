@@ -314,12 +314,14 @@ set -g @tpm_plugins '           \
   tmux-plugins/tmux-resurrect   \
   tmux-plugins/tmux-cpu         \
   tmux-plugins/tmux-yank        \
+  tmux-plugins/tmux-continuum   \
 '
 
 # Tell resurrect how to store vim sessions
 set -g @resurrect-strategy-vim 'session'
 set -g @resurrect-capture-pane-contents 'on'
 
+set -g @continuum-restore 'on'
+
 # run tpm
 run -b '~/.tmux/plugins/tpm/tpm'
-
