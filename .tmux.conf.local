@@ -182,7 +182,7 @@ set -g @cpu_medium_fg_color "#[fg=yellow]" # background color when cpu is medium
 set -g @cpu_high_fg_color "#[fg=red]" # background color when cpu is high
 
 tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{cpu_fg_color} [CPU: #{cpu_percentage}] #{ram_fg_color} [RAM: #{ram_percentage}] #{gpu_fg_color} [GPU: #{gpu_percentage}] #{gram_fg_color} [VRAM: #{gram_percentage}] #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 
 # status left style
 tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
@@ -312,7 +312,6 @@ set -g @tpm_plugins '           \
   tmux-plugins/tpm              \
   tmux-plugins/tmux-sensible    \
   tmux-plugins/tmux-resurrect   \
-  tmux-plugins/tmux-cpu         \
   tmux-plugins/tmux-yank        \
   tmux-plugins/tmux-continuum   \
 '

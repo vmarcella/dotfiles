@@ -66,6 +66,8 @@ install_tmux() {
 install_neovim() {
     pushd "$(mktemp -d)"
     sudo pacman -Su --needed vim neovim
+    mkdir "$HOME/.vim/swap"
+    mkdir "$HOME/.vim/backup"
     pip3 install --user neovim
     popd
 }
@@ -97,7 +99,6 @@ install_gcloud() {
 install_clangd() {
     sudo pacman -Su --needed clang
 }
-
 
 install_tools() {
     install_tmux
