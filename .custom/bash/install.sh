@@ -8,17 +8,21 @@ install_deps() {
         autoconf \
         libtool \
         pkg-config \
-        cmake \ gcc \
+        cmake  \
+        gcc \
         g++ \
         make \
         xclip \
         ripgrep \
         xorg-server \
-        mesa \ 
+        mesa \
         tree \
         blueman \
         pavucontrol \
-        discord
+        discord \
+        doxygen \
+        graphviz \
+        git-lfs
 }
 
 # -------------------------------- LANGUAGES ----------------------------------
