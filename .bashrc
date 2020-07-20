@@ -207,5 +207,6 @@ initgit() {
 
 # Update the stylus monitor.
 setStylusMonitor() {
-    xsetwacom set "HID 256c:006d Pen Type" MapToOutput "HEAD-$1"
+    xsetwacom set "HID 256c:006d Pen stylus" MapToOutput "HEAD-$1" && \
+    echo "Set the stylus to use monitor $1."
 }
