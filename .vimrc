@@ -43,16 +43,16 @@ endif
 " -------------------------------------- ALE -----------------------------------
 
 let g:ale_fixers = {
-\'python':['autopep8', 'black', 'isort'],
-\'typescript':['prettier', 'eslint'],
-\'javascript':['prettier', 'eslint'],
-\'go':['gofmt', 'goimports']
+    \'python':['autopep8', 'black', 'isort'],
+    \'typescript':['prettier', 'eslint'],
+    \'javascript':['prettier', 'eslint'],
+    \'go':['gofmt', 'goimports']
 \}
 
 let g:ale_linters = {
-\'css': ['stylelint'], 
-\'javascript': ['eslint'], 
-\'cpp': ['cpplint']
+    \'css': ['stylelint'], 
+    \'javascript': ['eslint'], 
+    \'cpp': ['cpplint']
 \}
 
 let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
@@ -62,21 +62,7 @@ let g:ale_go_golint_options = '-w -s'
 let g:ale_fix_on_save = 1
 
 
-" let g:NERDTreeNodeDelimiter = "\u00a0"
-
-" Add colors
-" hi link illuminatedWord Visual
-
-" Add golang linter
-set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
-
-" For every vue file, 
-autocmd BufNewFile,BufRead *.vue set filetype=html
-
-"Enable plugin indent
-filetype plugin indent on
-
-" Coc plugin updates
+" ------------------------------------ COC --------------------------------
 
 let g:coc_global_extensions = [
     \ 'coc-snippets',
@@ -96,9 +82,108 @@ let g:coc_global_extensions = [
     \ 'coc-yaml'
     \ ]
 
+" -------------------------------- VIM CONFIG ----------------------------------
 
-set cmdheight=1 " Set the cmd height
-set updatetime=300 " Change the update time.
+syntax on                        " Turn syntax highlighting on.
+set nowrap                       " Don't wrap lines.
+set backspace=indent,eol,start   " Backspace over anything.
+set autoindent                   " Auto indents, at least I think
+set copyindent                   " Copy previous indentation of autoindent.
+set number                       " set line numbers
+set tabstop=4 shiftwidth=4       " Tabbing is always 4 spaces (hard tabs)
+set expandtab                    " Insert tabs at the start of the line.
+set showmatch                    " Show matching parantheses.
+set visualbell                   " Don't beep
+set noerrorbells                 " Plz don't beep
+set hidden                       " Allow hidden buffers to exist.
+set backup                       " Setup backup
+set backupdir=$HOME/.vim/backup/ " Where to save backup files
+set noswapfile                   " Remove the swap file
+set dir=$HOME/.vim/swap/         " Swap file home location
+set background=dark              " Set the background dark
+set t_Co=256                     " Set the terminal to use 256 colors
+set autoread                     " poll for file updates automatically
+set clipboard=unnamedplus        " Allows access to the global clipboard
+set foldmethod=syntax            " Set the fold method to rely on the language
+set nofoldenable                 " Remove folding
+set encoding=UTF-8               " UTF-8 character encodings
+set exrc                         " enable per project configurations
+set secure                       " disable autocmd in files not owned by me.
+set splitbelow                   " Allows split to below
+set splitright                   " Always split to the right
+set cmdheight=1                  " Set the cmd height
+set updatetime=300               " Change the update time.
+
+
+" Set splits to be default on the bottom and right.
+" -------------------------------- ETC CONFIG ----------------------------------
+
+set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim    " Add golang linter
+autocmd BufNewFile,BufRead *.vue set filetype=html " Set Vue to use html plugins
+filetype plugin indent on                          " Enable plugin indent
+
+" ------------------------------------ COLORS ----------------------------------
+
+" Generic colors
+hi! Comment ctermfg=226
+hi! String ctermfg=81
+hi! Number ctermfg=81
+hi! Float ctermfg=81
+hi! Constant ctermfg=231
+hi! Function ctermfg=203
+hi! Type ctermfg=121
+hi! LineNr ctermfg=226
+
+" Coc
+hi! CocFloating ctermfg=152 ctermbg=234
+
+" C++
+hi! cppSTLFunction ctermfg=231
+hi! cppSTLType ctermfg=231
+hi! cppStructure ctermfg=226
+
+" Highlight text longer than 80 chars.
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+"
+" ------------------------------------ INPUT -----------------------------------
+
+" Go to normal mode and quit once in it
+inoremap <silent> jj <ESC>
+nnoremap <silent> ;; :q<CR>
+
+" Buffers - explore/next/previous (Bufexplorer plugin)
+nnoremap <silent> 77 :BufExplorer<CR>
+nnoremap <silent> 99 :bn<CR>
+nnoremap <silent> 88 :bp<CR>
+
+" Key mapping for saving via ctrl-s in all modes
+noremap <silent> <C-S> :update<CR>
+vnoremap <silent> <C-S> <C-C>:update<CR>
+inoremap <silent> <C-S> <C-O>:update<CR>
+
+" Key mapping for nerdtree
+map <C-N> :NERDTreeToggle %<CR>
+let NERDTreeShowHidden=1
+
+" Disable high lighting.
+nnoremap \\ :noh<return>
+
+" Setup for vim splits. This lets you easily travel between splits.
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Disable arrow keys.
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
 
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
@@ -183,99 +268,3 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" -------------------------------- VIM CONFIG ----------------------------------
-
-syntax on                        " Turn syntax highlighting on.
-set nowrap                       " Don't wrap lines.
-set backspace=indent,eol,start   " Backspace over anything.
-set autoindent                   " Auto indents, at least I think
-set copyindent                   " Copy previous indentation of autoindent.
-set number                       " set line numbers
-set tabstop=4 shiftwidth=4       " Tabbing is always 4 spaces (hard tabs)
-set expandtab                    " Insert tabs at the start of the line.
-set showmatch                    " Show matching parantheses.
-set visualbell                   " Don't beep
-set noerrorbells                 " Plz don't beep
-set hidden                       " Allow hidden buffers to exist.
-set backup                       " Setup backup
-set backupdir=$HOME/.vim/backup/ " Where to save backup files
-set noswapfile                   " Remove the swap file
-set dir=$HOME/.vim/swap/         " Swap file home location
-set background=dark              " Set the background dark
-set t_Co=256                     " Set the terminal to use 256 colors
-set autoread                     " poll for file updates automatically
-set clipboard=unnamedplus        " Allows access to the global clipboard
-set foldmethod=syntax            " Set the fold method to rely on the language
-set nofoldenable                 " Remove folding
-set encoding=UTF-8               " UTF-8 character encodings
-
-" ------------------------------------ COLORS ----------------------------------
-
-" Generic
-hi! Comment ctermfg=226
-hi! String ctermfg=81
-hi! Number ctermfg=81
-hi! Float ctermfg=81
-hi! Constant ctermfg=231
-hi! Function ctermfg=203
-hi! Type ctermfg=121
-
-hi! LineNr ctermfg=226
-
-" Coc
-hi! CocFloating ctermfg=152 ctermbg=234
-
-" C++
-hi! cppSTLFunction ctermfg=231
-hi! cppSTLType ctermfg=231
-hi! cppStructure ctermfg=226
-
-" Highlight text longer than 80 chars.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
-"
-" ------------------------------------ INPUT -----------------------------------
-
-" Go to normal mode and quit once in it
-inoremap <silent> jj <ESC>
-nnoremap <silent> ;; :q<CR>
-
-" Buffers - explore/next/previous (Bufexplorer plugin)
-nnoremap <silent> 77 :BufExplorer<CR>
-nnoremap <silent> 99 :bn<CR>
-nnoremap <silent> 88 :bp<CR>
-
-" Key mapping for saving via ctrl-s in all modes
-noremap <silent> <C-S> :update<CR>
-vnoremap <silent> <C-S> <C-C>:update<CR>
-inoremap <silent> <C-S> <C-O>:update<CR>
-
-" Key mapping for nerdtree
-map <C-N> :NERDTreeToggle %<CR>
-let NERDTreeShowHidden=1
-
-" Disable high lighting.
-nnoremap \\ :noh<return>
-
-set exrc " enable per project configurations
-set secure " disable autocmd to be run from files that arent' owned by me
-
-" Setup for vim splits. This lets you easily travel between splits.
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Set splits to be default on the bottom and right.
-set splitbelow
-set splitright
-
-" Disable arrow keys.
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
