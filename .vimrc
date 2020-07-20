@@ -1,26 +1,26 @@
-"Start the plugin process
+" ------------------------------------ PLUGINS ---------------------------------
+
 call plug#begin('~/.vim/plugged')
 
-Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder.
-Plug 'sheerun/vim-polyglot' " Better syntax and indentation.
-Plug 'scrooloose/nerdtree' " File explorer.
-Plug 'vim-airline/vim-airline' " Status line with buffers shown
-Plug 'OmniSharp/omnisharp-vim' " Omnisharp
-Plug 'jlanzarotta/bufexplorer' " Buffer explorer
-Plug 'airblade/vim-gitgutter' " Shows git diffs in 'gutter'
-Plug 'neoclide/coc.nvim', {'branch':'release'}
-Plug 'ryanoasis/vim-devicons' " Install devicon Install devicons
-Plug 'wakatime/vim-wakatime' " Make sure that I am coding
-Plug 'mattn/emmet-vim' " Provides a nice way to write html
-Plug 'w0rp/ale' " Asyncrhonous linter for all linters
-Plug 'luochen1990/rainbow' " Rainbow highlighting for braces and paranthesis
-Plug 'RRethy/vim-illuminate' " Highlight words that match what's under the cursor throughout the file
-Plug 'lilydjwg/colorizer' " Colorize hex color codes
-Plug 'tmux-plugins/vim-tmux-focus-events' " Allow tmux to pass through on and off focus events into vim
-Plug 'tpope/vim-obsession' " Write the current state of vim into a command
+Plug 'flazz/vim-colorschemes'
+Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder
+Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation
+Plug 'scrooloose/nerdtree'                      " File explorer
+Plug 'vim-airline/vim-airline'                  " Status line with buffers shown
+Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer
+Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'
+Plug 'neoclide/coc.nvim', {'branch':'release'}  " Auto completion for all langs
+Plug 'ryanoasis/vim-devicons'                   " devicons
+Plug 'wakatime/vim-wakatime'                    " Time tracking
+Plug 'w0rp/ale'                                 " Async linting
+Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor
+Plug 'lilydjwg/colorizer'                       " Colorize hex color codes
+Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events
+Plug 'tpope/vim-obsession'                      " Persist state of vim
 
-" Plug 'grailbio/bazel-compilation-database' For working with bazel projects like terrace
 call plug#end() " Init all plugins
+
+" ------------------------------------ AIRLINE ---------------------------------
 
 " Add powerline to vim shell
 let g:airline_powerline_fonts = 1
@@ -29,7 +29,10 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 " enable rainbow plugin at startup
-let g:rainbow_active = 0
+let g:rainbow_active = 1
+
+
+" ------------------------------------ RIPGREP ---------------------------------
 
 if executable('rg')
     set grepprg=rg\ --color=never
@@ -37,9 +40,8 @@ if executable('rg')
     let g:ctrlp_use_caching = 0
 endif
 
-" Setup ale fixers
-" Currently blocked out since it's being a bad boi
-" \'cpp':['clang-format'],
+" -------------------------------------- ALE -----------------------------------
+
 let g:ale_fixers = {
 \'python':['autopep8', 'black', 'isort'],
 \'typescript':['prettier', 'eslint'],
@@ -59,7 +61,6 @@ let g:ale_cpp_cpplint_options = '--filter=-build/include_subdir, -legal/copyrigh
 let g:ale_go_golint_options = '-w -s'
 let g:ale_fix_on_save = 1
 
-" Nerd tree config
 
 " let g:NERDTreeNodeDelimiter = "\u00a0"
 
@@ -73,7 +74,6 @@ set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
 autocmd BufNewFile,BufRead *.vue set filetype=html
 
 "Enable plugin indent
-filetype plugin on
 filetype plugin indent on
 
 " Coc plugin updates
@@ -96,8 +96,6 @@ let g:coc_global_extensions = [
     \ 'coc-yaml'
     \ ]
 
-" Set the color of the floating background.
-hi! CocFloating ctermfg=152 ctermbg=234
 
 set cmdheight=1 " Set the cmd height
 set updatetime=300 " Change the update time.
@@ -150,8 +148,7 @@ endfunction
 " Highlight the symbol and all it's references.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Rename symbols
-nmap <leader>rn <Plug>(coc-rename)
+" Rename symbols nmap <leader>rn <Plug>(coc-rename)
 
 " Remap keys for applying codeAction to the current line.
 nmap <leader>ac  <Plug>(coc-codeaction)
@@ -186,47 +183,74 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" Vanilla vim modifications
-" let laststatus=2 "Display the status line for vim. (Needed for lightline)
-syntax on "Turn syntax highlighting on. (Needed for polyglot)
-set nowrap "Don't wrap lines.
-set backspace=indent,eol,start "Allow everything to be backspaced over in insert mode.
-set autoindent "Auto indents, at least I think
-set copyindent "Copy previous indentation of autoindent.
-set number "set line numbers
-set tabstop=4 shiftwidth=4 "Tabbing is always 4 spaces (hard tabs)
-set expandtab "INsert tabs on the start of a line according to shiftwidth
-set showmatch "Show matching parantheses.
-set visualbell "Don't beep
-set noerrorbells "Plz don't beep
-set hidden "Allow edited hidden buffers that aren't visible to exist in the back
-set backup "Tells vim where to save backup files
-set backupdir=$HOME/.vim/backup/ "Where to save backup files
-set noswapfile "Remove the swap file
-set dir=$HOME/.vim/swap/ "Where to save swap files
-set background=dark "Set the background dark
-set t_Co=256 "Set the terminal to use 256 colors
-set autoread " Set vim to autoread from a file if it's been modified
-set clipboard=unnamedplus " Allows access to the global clipboard
-set foldmethod=syntax  "  Set the fold method to rely on the language
-set nofoldenable " Remove folding
-set encoding=UTF-8 " UTF-8 character encodings
+" -------------------------------- VIM CONFIG ----------------------------------
 
-"Go to normal mode and quit once in it
+syntax on                        " Turn syntax highlighting on.
+set nowrap                       " Don't wrap lines.
+set backspace=indent,eol,start   " Backspace over anything.
+set autoindent                   " Auto indents, at least I think
+set copyindent                   " Copy previous indentation of autoindent.
+set number                       " set line numbers
+set tabstop=4 shiftwidth=4       " Tabbing is always 4 spaces (hard tabs)
+set expandtab                    " Insert tabs at the start of the line.
+set showmatch                    " Show matching parantheses.
+set visualbell                   " Don't beep
+set noerrorbells                 " Plz don't beep
+set hidden                       " Allow hidden buffers to exist.
+set backup                       " Setup backup
+set backupdir=$HOME/.vim/backup/ " Where to save backup files
+set noswapfile                   " Remove the swap file
+set dir=$HOME/.vim/swap/         " Swap file home location
+set background=dark              " Set the background dark
+set t_Co=256                     " Set the terminal to use 256 colors
+set autoread                     " poll for file updates automatically
+set clipboard=unnamedplus        " Allows access to the global clipboard
+set foldmethod=syntax            " Set the fold method to rely on the language
+set nofoldenable                 " Remove folding
+set encoding=UTF-8               " UTF-8 character encodings
+
+" ------------------------------------ COLORS ----------------------------------
+
+" Generic
+hi! Comment ctermfg=226
+hi! String ctermfg=81
+hi! Number ctermfg=81
+hi! Float ctermfg=81
+hi! Constant ctermfg=231
+hi! Function ctermfg=203
+hi! Type ctermfg=121
+
+hi! LineNr ctermfg=226
+
+" Coc
+hi! CocFloating ctermfg=152 ctermbg=234
+
+" C++
+hi! cppSTLFunction ctermfg=231
+hi! cppSTLType ctermfg=231
+hi! cppStructure ctermfg=226
+
+" Highlight text longer than 80 chars.
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+"
+" ------------------------------------ INPUT -----------------------------------
+
+" Go to normal mode and quit once in it
 inoremap <silent> jj <ESC>
 nnoremap <silent> ;; :q<CR>
 
-"Buffers - explore/next/previous (Bufexplorer plugin)
+" Buffers - explore/next/previous (Bufexplorer plugin)
 nnoremap <silent> 77 :BufExplorer<CR>
 nnoremap <silent> 99 :bn<CR>
 nnoremap <silent> 88 :bp<CR>
 
-"Key mapping for saving via ctrl-s in all modes
+" Key mapping for saving via ctrl-s in all modes
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
-"Key mapping for nerdtree
+" Key mapping for nerdtree
 map <C-N> :NERDTreeToggle %<CR>
 let NERDTreeShowHidden=1
 
@@ -255,7 +279,3 @@ imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
-
-" Highlight text over 80 chars.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
