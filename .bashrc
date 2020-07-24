@@ -177,6 +177,8 @@ alias tdetach="tmux detach"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
+alias start_keychain='eval `keychain --eval --agents ssh id_ed25519`'
+
 alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
 # ---------------------------------- FUNCTIONS ---------------------------------
