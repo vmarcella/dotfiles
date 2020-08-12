@@ -125,7 +125,7 @@ filetype plugin indent on                          " Enable plugin indent
 " ------------------------------------ COLORS ----------------------------------
 
 " Generic colors
-hi! Comment ctermfg=226
+hi! Comment ctermfg=245
 hi! String ctermfg=81
 hi! Number ctermfg=81
 hi! Float ctermfg=81
