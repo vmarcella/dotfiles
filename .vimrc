@@ -137,8 +137,8 @@ hi! LineNr ctermfg=226
 hi! CocFloating ctermfg=152 ctermbg=234
 
 " C++
-hi! cppSTLFunction ctermfg=231
-hi! cppSTLType ctermfg=231
+" hi! cppSTLFunction ctermfg=231
+" hi! cppSTLType ctermfg=231
 hi! cppStructure ctermfg=226
 
 " Highlight text longer than 80 chars.
