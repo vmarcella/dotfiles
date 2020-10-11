@@ -88,7 +88,7 @@ syntax on                        " Turn syntax highlighting on.
 set nowrap                       " Don't wrap lines.
 set backspace=indent,eol,start   " Backspace over anything.
 set autoindent                   " Auto indents, at least I think
-set copyindent                   " Copy previous indentation of autoindent.
+set smartindent                   " Copy previous indentation of autoindent.
 set number                       " set line numbers
 set tabstop=4 shiftwidth=4       " Tabbing is always 4 spaces (hard tabs)
 set expandtab                    " Insert tabs at the start of the line.
