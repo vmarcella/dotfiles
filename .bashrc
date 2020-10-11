@@ -199,13 +199,6 @@ gi() {
     curl -L -s https://www.gitignore.io/api/$@
 }
 
-#Create a git repository with the global git ignore file inserted into it
-initgit() {
-    git init
-    gi $@ >> .gitignore
-    cp ~/.local/README.md README.md
-    cp ~/.custom/LICENSE LICENSE
-}
 
 # Update the stylus monitor.
 setStylusMonitor() {

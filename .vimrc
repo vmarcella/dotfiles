@@ -152,7 +152,7 @@ inoremap <silent> jj <ESC>
 nnoremap <silent> ;; :q<CR>
 
 " Buffers - explore/next/previous (Bufexplorer plugin)
-nnoremap <silent> 77 :BufExplorer<CR>
+nnoremap <silent> 00 :BufExplorer<CR>
 nnoremap <silent> 99 :bn<CR>
 nnoremap <silent> 88 :bp<CR>
 

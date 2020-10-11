@@ -41,7 +41,7 @@ install_golang() {
 }
 
 install_java() {
-    sudo apt install --needed jre-openjdk
+    sudo pacman -Su --needed jre-openjdk
 }
 
 install_node() {
