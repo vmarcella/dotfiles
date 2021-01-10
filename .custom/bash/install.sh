@@ -63,7 +63,7 @@ install_tmux() {
     pushd "$HOME"
     git clone https://github.com/gpakosz/.tmux
     ln -s -f .tmux/.tmux.conf
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
     popd  # $HOME
 }
 
