@@ -11,7 +11,6 @@ Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer
 Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'
 Plug 'neoclide/coc.nvim', {'branch':'release'}  " Auto completion for all langs
 Plug 'ryanoasis/vim-devicons'                   " devicons
-Plug 'wakatime/vim-wakatime'                    " Time tracking
 Plug 'w0rp/ale'                                 " Async linting
 Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor
 Plug 'lilydjwg/colorizer'                       " Colorize hex color codes
