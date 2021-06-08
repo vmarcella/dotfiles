@@ -4,5 +4,11 @@
     "omnisharp.useDotnet": true,
     "cSpell.userWords": [
       "opengl"
-    ]
+    ],
+    "languageserver": {
+        "zls": {
+            "command": "/home/cenz/zls/zig-out/bin/zls",
+            "filetypes": ["zig"]
+        }
+    }
 }
