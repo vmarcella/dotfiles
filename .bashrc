@@ -177,7 +177,7 @@ alias tdetach="tmux detach"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
-alias start_keychain='eval `keychain --eval --agents ssh id_ed25519`'
+alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa`'
 
 alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
@@ -209,3 +209,5 @@ setStylusMonitor() {
     xsetwacom set "HID 256c:006d Pen stylus" MapToOutput "HEAD-$1" && \
     echo "Set the stylus to use monitor $1."
 }
+
+source ~/.custom/azure/vm.sh
