@@ -1,6 +1,5 @@
 {
     "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh",
-    "clangd.arguments": ["--cross-file-rename"],
     "omnisharp.useDotnet": true,
     "cSpell.userWords": [
       "opengl"
@@ -9,6 +8,31 @@
         "zls": {
             "command": "/home/cenz/zls/zig-out/bin/zls",
             "filetypes": ["zig"]
+        },
+        "clangd": {
+            "command": "clangd",
+            "filetypes": [
+                "c",
+                "cpp"
+            ],
+            "rootPatterns": [
+                "compile_commands.json",
+                ".git"
+            ],
+            "args": [
+                "--all-scopes-completion",
+                "--background-index",
+                "--clang-tidy",
+                "--compile-commands-dir=build",
+                "--compile_args_from=filesystem",
+                "--completion-parse=always",
+                "--completion-style=detailed",
+                "--cross-file-rename",
+                "--function-arg-placeholders",
+                "--header-insertion=never",
+                "--limit-results=0",
+                "-j=6"
+            ]
         }
     }
 }
