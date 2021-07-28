@@ -72,10 +72,8 @@ let g:coc_global_extensions = [
     \ 'coc-css',
     \ 'coc-json',
     \ 'coc-eslint',
-    \ 'coc-clangd',
     \ 'coc-rls',
     \ 'coc-go',
-    \ 'coc-omnisharp',
     \ 'coc-python',
     \ 'coc-spell-checker',
     \ 'coc-yaml'
