@@ -1,6 +1,6 @@
 source $HOME/.custom/lambda-sh/lambda.sh
 
-# This variable manages the 
+# For helper functions to use when 
 export __AZURE_VM_LAST_VM="";
 export __AZURE_VM_LAST_RG=""
 
@@ -69,6 +69,16 @@ az_vm_create() {
 
     __AZURE_VM_LAST_VM="$LAMBDA_name"
     __AZURE_VM_LAST_RG="$LAMBDA_resource_group"
+}
+
+# Create an Ubuntu Bionic virtual machine.
+az_vm_create_ubuntu_bionic() {
+    az_vm_create "$@" --image "Canonical:UbuntuServer:18.04-LTS:latest"
+}
+
+# Create an Ubuntu focal virtual machine.
+az_vm_create_ubuntu_focal() {
+    az_vm_create "$@" --image "Canonical:0001-com-ubuntu-server-focal:20_04-lts"
 }
 
 az_vm_delete() {
