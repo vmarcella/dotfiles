@@ -78,7 +78,8 @@ az_vm_create_ubuntu_bionic() {
 
 # Create an Ubuntu focal virtual machine.
 az_vm_create_ubuntu_focal() {
-    az_vm_create "$@" --image "Canonical:0001-com-ubuntu-server-focal:20_04-lts"
+    az_vm_create \
+        "$@" --image "Canonical:0001-com-ubuntu-server-focal:20_04-LTS:latest"
 }
 
 az_vm_delete() {
