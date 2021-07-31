@@ -210,4 +210,5 @@ setStylusMonitor() {
     echo "Set the stylus to use monitor $1."
 }
 
+# Load azure extensions
 source ~/.custom/azure/vm.sh
