@@ -82,6 +82,35 @@ az_vm_create_ubuntu_focal() {
         "$@" --image "Canonical:0001-com-ubuntu-server-focal:20_04-LTS:latest"
 }
 
+az_vm_get_full_dns_name() {
+    trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
+
+    lambda_args_add \
+        --name "name" \
+        --description "Virtual machine trying to be connected to."
+
+    lambda_args_add \
+        --name region \
+        --description "The region that the VM is being hosted in." \
+        --default "westus2"
+
+    lambda_args_compile "$@"
+
+    printf "$LAMBDA_name.$LAMBDA_region.cloudapp.azure.com"
+}
+
+az_vm_can_connect() {
+    trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
+
+    lambda_args_add \
+        --name "name" \
+        --description "Virtual machine trying to be connected to."
+
+    lambda_args_add \
+        --name nsg-name
+
+}
+
 az_vm_delete() {
     trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
 
