@@ -80,10 +80,8 @@ az_vm_create() {
         --admin-username "$LAMBDA_username" \
         --size "$LAMBDA_size" \
         --image  "$LAMBDA_image" \
-        --ssh-key-values "$LAMBDA_ssh_key_name" \
-        --subnet "${LAMBDA_name}-subnet" \
-        --vnet-name "${LAMBDA_name}-vnet" \
-        --public-ip-address-dns-name "$LAMBDA_name"
+        --public-ip-address-dns-name "$LAMBDA_name" \
+        --generate-ssh-keys
 
     lambda_assert_last_command_ok "Failed to create a virtual machine."
 
