@@ -22,6 +22,17 @@ az_subscription_set() {
     az account set --subscription "$LAMBDA_name"
 }
 
+az_storage_account_create() {
+    trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
+    
+    lambda_args_add \
+        --name name \
+        --description "The name of the storage account (Same as resource group name)" \
+        --default "vmarcella-rg"
+
+    lambda_args_compile "$@"
+}
+
 az_vm_create() {
     trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
 
@@ -40,7 +51,6 @@ az_vm_create() {
         --description "The admin username for the vm." \
         --default "azlinux"
 
-
     lambda_args_add \
         --name "image" \
         --description "Image to deploy on the virtual machine." \
@@ -51,19 +61,29 @@ az_vm_create() {
         --description "Virtual machine size." \
         --default "Standard_D2S_V3"
 
+    lambda_args_add \
+        --name "ssh-key-name" \
+        --description "The name of the SSH key to use" \
+        --default "~/.ssh/azlinux.pub"
+
     lambda_args_compile "$@"
 
     if [ $? = 1 ]; then
         return
     fi
 
+    lambda_log_info "$LAMBDA_ssh_key_name"
     # Add custom sizes and other configurations
     az vm create \
         -g "$LAMBDA_resource_group" \
         -n "$LAMBDA_name" \
         --admin-username "$LAMBDA_username" \
         --size "$LAMBDA_size" \
-        --image  "$LAMBDA_image"
+        --image  "$LAMBDA_image" \
+        --ssh-key-values "$LAMBDA_ssh_key_name" \
+        --subnet "${LAMBDA_name}-subnet" \
+        --vnet-name "${LAMBDA_name}-vnet" \
+        --public-ip-address-dns-name "$LAMBDA_name"
 
     lambda_assert_last_command_ok "Failed to create a virtual machine."
 
@@ -107,8 +127,27 @@ az_vm_can_connect() {
         --description "Virtual machine trying to be connected to."
 
     lambda_args_add \
-        --name nsg-name
+        --name resource-group \
+        --description "The Resource group the virtual machine is in." \
+        --default "vmarcella-rg"
 
+    lambda_args_compile "$@"
+
+    local REPORTED_SOURCE_ADDRESS="$(\
+        az network nsg rule show \
+            --resource-group "$LAMBDA_resource_group" \
+            --name "default-allow-ssh" \
+            --nsg-name "${LAMBDA_name}NSG" \
+            --query sourceAddressPrefix \
+            -o tsv)"
+
+    local ACTUAL_SOURCE_ADDRESS="$curl -s ipinfo.io/ip"
+    echo "$ACTUAL_SOURCE_ADDRESS (Public IP) -> $CURRENT_SOURCE_ADDRESS (NSG IP)"
+    if [[ "$CURRENT_SOURCE_ADDRESS" != "$ACTUAL_SOURCE_ADDRESS" ]]; then
+        echo "Connection not possible"
+    else
+        echo "Connection possible"
+    fi
 }
 
 az_vm_delete() {
