@@ -52,7 +52,7 @@ install_langs() {
 install_tmux() {
     sudo apt install tmux
     pushd "$HOME"
-    git clone github:gpakosz/.tmux
+    git clone https://github.com/gpakosz/.tmux
     ln -s -f .tmux/.tmux.conf
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     popd

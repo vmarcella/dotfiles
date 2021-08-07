@@ -177,7 +177,7 @@ alias tdetach="tmux detach"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
-alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa`'
+alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa azlinux`'
 
 alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
@@ -210,4 +210,5 @@ setStylusMonitor() {
     echo "Set the stylus to use monitor $1."
 }
 
+# Load azure extensions
 source ~/.custom/azure/vm.sh
