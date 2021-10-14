@@ -47,10 +47,6 @@ install_node() {
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 }
 
-install_ziggy() {
-
-}
-
 install_langs() {
     install_python
     install_rust
