@@ -87,7 +87,7 @@ set backspace=indent,eol,start   " Backspace over anything.
 set autoindent                   " Auto indents, at least I think
 set smartindent                   " Copy previous indentation of autoindent.
 set number                       " set line numbers
-set tabstop=4 shiftwidth=4       " Tabbing is always 4 spaces (hard tabs)
+set tabstop=2 shiftwidth=2       " Tabbing is always 4 spaces (hard tabs)
 set expandtab                    " Insert tabs at the start of the line.
 set showmatch                    " Show matching parantheses.
 set visualbell                   " Don't beep
@@ -113,6 +113,7 @@ set updatetime=300               " Change the update time.
 
 
 " Set splits to be default on the bottom and right.
+
 " -------------------------------- ETC CONFIG ----------------------------------
 
 set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim    " Add golang linter
@@ -120,15 +121,6 @@ autocmd BufNewFile,BufRead *.vue set filetype=html " Set Vue to use html plugins
 filetype plugin indent on                          " Enable plugin indent
 
 " ------------------------------------ COLORS ----------------------------------
-
-hi! Comment ctermfg=246
-hi! String ctermfg=81
-hi! Number ctermfg=81
-hi! Float ctermfg=81
-hi! Constant ctermfg=231
-hi! Function ctermfg=203
-hi! Type ctermfg=121
-hi! LineNr ctermfg=226
 
 " Coc
 hi! CocFloating ctermfg=152 ctermbg=234
