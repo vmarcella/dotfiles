@@ -6,6 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # ----------------------------------- ZINIT ------------------------------------
+#
 ### Load up zinit
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -31,14 +32,10 @@ zinit load zsh-users/zsh-autosuggestions
 zinit load zsh-users/zsh-syntax-highlighting
 zinit load zsh-users/zsh-completions
 
-zinit load wting/autojump
+zinit light romkatv/powerlevel10k
+zinit load agkozak/zsh-z
 zinit load supercrabtree/k
 zinit load skx/sysadmin-util
-
-# Load powerlevel10k theme
-# TODO(vmarcella): This can be updated to not be specific to it's installation 
-# location on Manjaro.
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -80,9 +77,6 @@ vim() {
         # osx users, use stty -g
         local STTYOPTS="$(stty --save)"
         stty stop '' -ixoff
-        export TERM=xterm-256color
         command nvim "$@"
         stty "$STTYOPTS"
 }
-
-

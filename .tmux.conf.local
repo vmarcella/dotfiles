@@ -291,7 +291,7 @@ set -g prefix C-a
 bind C-a send-prefix
 
 # move status line to top
-set -g status-position bottom
+set -g status-position top
 
 tmux_conf_theme_left_separator_main=''
 tmux_conf_theme_left_separator_sub=''
