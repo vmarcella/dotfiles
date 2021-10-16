@@ -100,7 +100,7 @@ set dir=$HOME/.vim/swap/         " Swap file home location
 set background=dark              " Set the background dark
 set t_Co=256                     " Set the terminal to use 256 colors
 set autoread                     " poll for file updates automatically
-set clipboard=unnamedplus        " Allows access to the global clipboard
+" set clipboard=unnamedplus        " Allows access to the global clipboard
 set foldmethod=syntax            " Set the fold method to rely on the language
 set nofoldenable                 " Remove folding
 set encoding=UTF-8               " UTF-8 character encodings
@@ -121,6 +121,15 @@ autocmd BufNewFile,BufRead *.vue set filetype=html " Set Vue to use html plugins
 filetype plugin indent on                          " Enable plugin indent
 
 " ------------------------------------ COLORS ----------------------------------
+
+hi! Comment ctermfg=246
+hi! String ctermfg=81
+hi! Number ctermfg=81
+hi! Float ctermfg=81
+hi! Constant ctermfg=231
+hi! Function ctermfg=203
+hi! Type ctermfg=121
+hi! LineNr ctermfg=226
 
 " Coc
 hi! CocFloating ctermfg=152 ctermbg=234

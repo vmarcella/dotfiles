@@ -28,14 +28,18 @@ zinit light-mode for \
     zinit-zsh/z-a-patch-dl \
     zinit-zsh/z-a-bin-gem-node
 
-zinit load zsh-users/zsh-autosuggestions
-zinit load zsh-users/zsh-syntax-highlighting
-zinit load zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
 
 zinit light romkatv/powerlevel10k
-zinit load agkozak/zsh-z
-zinit load supercrabtree/k
-zinit load skx/sysadmin-util
+zinit light agkozak/zsh-z
+zinit light supercrabtree/k
+zinit light skx/sysadmin-util
+
+# Load zsh-vim-mode and set the normal mode key to jj
+VIM_MODE_VICMD_KEY='jj'
+zinit load softmoth/zsh-vim-mode
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
