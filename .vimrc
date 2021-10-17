@@ -72,7 +72,7 @@ let g:coc_global_extensions = [
     \ 'coc-css',
     \ 'coc-json',
     \ 'coc-eslint',
-    \ 'coc-rls',
+    \ 'coc-rust-analyzer',
     \ 'coc-go',
     \ 'coc-python',
     \ 'coc-spell-checker',
