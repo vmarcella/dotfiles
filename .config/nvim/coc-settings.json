@@ -1,5 +1,4 @@
 {
-    "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh",
     "omnisharp.useDotnet": true,
     "cSpell.userWords": [
       "opengl"
