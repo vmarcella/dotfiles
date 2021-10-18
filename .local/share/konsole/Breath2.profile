@@ -1,8 +1,8 @@
 [Appearance]
 AntiAliasFonts=true
 BoldIntense=true
-ColorScheme=dark
-Font=FiraCode Nerd Font Mono,11,-1,5,57,0,0,0,0,0,Medium
+ColorScheme=MoeDark
+Font=FiraCode Nerd Font Mono,12,-1,5,57,0,0,0,0,0,Medium
 UseFontLineChararacters=true
 
 [General]
