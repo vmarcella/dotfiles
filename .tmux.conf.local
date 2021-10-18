@@ -309,6 +309,9 @@ bind C-c new-session -c "$HOME"
 # force tmux to stop renaming windows
 set-option -g allow-rename off
 
+# Set ZSH as the default shell for tmux sessions.
+set-option -g default-shell /bin/zsh
+
 # Set tpm plugins
 set -g @tpm_plugins '           \
   tmux-plugins/tpm              \
