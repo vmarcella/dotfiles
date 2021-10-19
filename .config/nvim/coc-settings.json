@@ -1,6 +1,6 @@
 {
-    "python.pythonPath":"/home/cenz/.custom/bash/coc_python.sh",
     "omnisharp.useDotnet": true,
+    "coc.preferences.formatOnSaveFiletypes":["rust"],
     "cSpell.userWords": [
       "opengl"
     ],
