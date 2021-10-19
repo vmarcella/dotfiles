@@ -11,7 +11,6 @@ Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer
 Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'
 Plug 'neoclide/coc.nvim', {'branch':'release'}  " Auto completion for all langs
 Plug 'ryanoasis/vim-devicons'                   " devicons
-Plug 'w0rp/ale'                                 " Async linting
 Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor
 Plug 'lilydjwg/colorizer'                       " Colorize hex color codes
 Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events
@@ -38,28 +37,6 @@ if executable('rg')
     let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
     let g:ctrlp_use_caching = 0
 endif
-
-" -------------------------------------- ALE -----------------------------------
-
-let g:ale_fixers = {
-    \'python':['autopep8', 'black', 'isort'],
-    \'typescript':['prettier', 'eslint'],
-    \'javascript':['prettier', 'eslint'],
-    \'go':['gofmt', 'goimports']
-\}
-
-let g:ale_linters = {
-    \'css': ['stylelint'], 
-    \'javascript': ['eslint'], 
-    \'cpp': ['cpplint']
-\}
-
-let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
-let g:ale_python_autopep8_options = '--aggressive -i'
-let g:ale_cpp_cpplint_options = '--filter=-build/include_subdir, -legal/copyright'
-let g:ale_go_golint_options = '-w -s'
-let g:ale_fix_on_save = 1
-
 
 " ------------------------------------ COC --------------------------------
 
@@ -100,9 +77,8 @@ set dir=$HOME/.vim/swap/         " Swap file home location
 set background=dark              " Set the background dark
 set t_Co=256                     " Set the terminal to use 256 colors
 set autoread                     " poll for file updates automatically
-" set clipboard=unnamedplus        " Allows access to the global clipboard
+set clipboard=unnamedplus        " Allows access to the global clipboard
 set foldmethod=syntax            " Set the fold method to rely on the language
-set nofoldenable                 " Remove folding
 set encoding=UTF-8               " UTF-8 character encodings
 set exrc                         " enable per project configurations
 set secure                       " disable autocmd in files not owned by me.
