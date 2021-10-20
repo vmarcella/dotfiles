@@ -2,7 +2,8 @@
     "omnisharp.useDotnet": true,
     "coc.preferences.formatOnSaveFiletypes":["rust"],
     "cSpell.userWords": [
-      "opengl"
+      "opengl",
+      "winit"
     ],
     "languageserver": {
         "zls": {
