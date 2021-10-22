@@ -15,6 +15,7 @@ Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor
 Plug 'lilydjwg/colorizer'                       " Colorize hex color codes
 Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events
 Plug 'tpope/vim-obsession'                      " Persist state of vim
+Plug 'tikhomirov/vim-glsl'                      " GLSL shading for vim.
 
 call plug#end() " Init all plugins
 
