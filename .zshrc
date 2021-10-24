@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # ----------------------------------- ZINIT ------------------------------------
-#
+
 ### Load up zinit
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -20,6 +20,7 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# ------------------------------- ZINIT PLUGINS --------------------------------
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -44,7 +45,15 @@ zinit load softmoth/zsh-vim-mode
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# ----------------------------------- HISTORY ----------------------------------
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY
+
 # ----------------------------------- EXPORTS ----------------------------------
+
 
 # Add the new .local/bin folder to the path for user specific data (weird)
 export PATH="$HOME/.custom/scripts:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$HOME/zig:$PATH"
