@@ -1,6 +1,6 @@
 {
     "omnisharp.useDotnet": true,
-    "coc.preferences.formatOnSaveFiletypes":["rust"],
+    "coc.preferences.formatOnSaveFiletypes":["rust", "python", "typescript"],
     "cSpell.userWords": [
       "opengl",
       "winit"

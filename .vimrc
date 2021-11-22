@@ -52,7 +52,7 @@ let g:coc_global_extensions = [
     \ 'coc-eslint',
     \ 'coc-rust-analyzer',
     \ 'coc-go',
-    \ 'coc-python',
+    \ 'coc-pyright',
     \ 'coc-spell-checker',
     \ 'coc-yaml'
     \ ]

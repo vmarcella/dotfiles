@@ -4,6 +4,10 @@ source $HOME/.custom/lambda-sh/lambda.sh
 export __AZURE_VM_LAST_VM="";
 export __AZURE_VM_LAST_RG=""
 
+clear_trap() {
+    trap - EXIT ERR SIGINT RETURN
+}
+
 az_subscription_set() {
     trap "lambda_args_cleanup" EXIT ERR SIGINT RETURN
 
