@@ -100,4 +100,6 @@ vim() {
         stty "$STTYOPTS"
 }
 
-
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
