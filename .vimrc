@@ -78,7 +78,7 @@ set dir=$HOME/.vim/swap/         " Swap file home location
 set background=dark              " Set the background dark
 set t_Co=256                     " Set the terminal to use 256 colors
 set autoread                     " poll for file updates automatically
-set clipboard=unnamedplus        " Allows access to the global clipboard
+set clipboard=unnamed        " Allows access to the global clipboard
 set foldmethod=syntax            " Set the fold method to rely on the language
 set encoding=UTF-8               " UTF-8 character encodings
 set exrc                         " enable per project configurations
