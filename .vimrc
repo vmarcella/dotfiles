@@ -87,6 +87,7 @@ set splitbelow                   " Allows split to below
 set splitright                   " Always split to the right
 set cmdheight=1                  " Set the cmd height
 set updatetime=300               " Change the update time.
+set mouse=a
 
 
 " Set splits to be default on the bottom and right.
