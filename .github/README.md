@@ -31,7 +31,7 @@ scripts below.
 
 ### Ubuntu
 ```bash
-./custom/ubuntu/install.sh
+./.custom/ubuntu/install.sh
 ```
 Tested on: 
   * Ubuntu 18.04 
