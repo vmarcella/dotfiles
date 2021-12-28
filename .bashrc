@@ -147,14 +147,9 @@ shopt -s histappend
 export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history -n"
 
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.custom/scripts:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$HOME/zig:$PATH"
+export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$HOME/zig"
 export EDITOR=nvim
 export TERM=xterm-256color
-
-# Virtualenvwrapper setup
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-export WORKON_HOME=$HOME/.virtualenvs
-source $HOME/.local/bin/virtualenvwrapper.sh 
 
 # Node virtual env setup
 export NVM_DIR="$HOME/.nvm"
@@ -167,32 +162,13 @@ POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 . /usr/share/powerline/bindings/bash/powerline.sh
 
-# ----------------------------------- ALIASES ----------------------------------
-
-# Tmux aliases
-alias tattach="tmux attach-session -t"
-alias tkill="tmux kill-session -t"
-alias tnew="tmux new -s"
-alias tdetach="tmux detach"
-
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa azlinux`'
-
-alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
-
-# Pats factorio server connection info.
-alias factorio_server_connect='wg-quick up /etc/wireguard/wg0.conf'
-alias factorio_server_disconnect='wg-quick down /etc/wireguard/wg0.conf'
-
-# ---------------------------------- FUNCTIONS ---------------------------------
+# -------------------------------- DEPENDENCIES --------------------------------
 
 #Vim wrapper to allow control keys to be passed to vim
 vim(){
 	# osx users, use stty -g
 	local STTYOPTS="$(stty --save)"
 	stty stop '' -ixoff
-	export TERM=xterm-256color
 	command nvim "$@"
 	stty "$STTYOPTS"
 }
