@@ -27,7 +27,7 @@ install_deps() {
 # -------------------------------- LANGUAGES ----------------------------------
 
 install_python() {
-    sudo pacman -Su --needed python
+    sudo pacman -Su --needed python-pip
     pip3 install --user virtualenv virtualenvwrapper
 }
 
@@ -44,7 +44,14 @@ install_java() {
 }
 
 install_node() {
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    local NVM_DIR="$HOME/.nvm"
+    if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
+        curl -o- \
+            https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh \
+            | bash
+
+        nvm install 16
+    fi
 }
 
 install_langs() {
@@ -58,22 +65,29 @@ install_langs() {
 
 # ---------------------------------- TOOLS ------------------------------------
 
+install_zsh() {
+    sudo pacman -Su --needed zsh
+}
+
 install_tmux() {
+    # Install tmux
     sudo pacman -Su --needed tmux
-    pushd "$HOME"
+
+    # Install oh-my-tmux
+    pushd "$HOME" > /dev/null
     git clone https://github.com/gpakosz/.tmux
     ln -s -f .tmux/.tmux.conf
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-    popd  # $HOME
+    popd > /dev/null  # $HOME
 }
 
 install_neovim() {
-    pushd "$(mktemp -d)"
     sudo pacman -Su --needed vim neovim
-    mkdir "$HOME/.vim/swap"
-    mkdir "$HOME/.vim/backup"
+
+    mkdir -p "$HOME/.vim/swap"
+    mkdir -p "$HOME/.vim/backup"
+
     pip3 install --user neovim
-    popd
 }
 
 install_vim_plugged() {
@@ -96,10 +110,6 @@ install_bazel() {
     sudo pacman -Su --needed bazel
 }
 
-install_gcloud() {
-    sudo pacman -Su --needed google-cloud-sdk
-}
-
 install_clangd() {
     sudo pacman -Su --needed clang
 }
@@ -111,7 +121,6 @@ install_tools() {
     install_powerline_status
     install_docker
     install_bazel
-    install_gcloud
     install_clangd
 }
 
