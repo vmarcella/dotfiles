@@ -27,5 +27,4 @@ config checkout 2>&1 | egrep "\s+\." \
 config checkout
 config config --local status.showUntrackedFiles no
 
-
 popd > /dev/null  # $HOME
