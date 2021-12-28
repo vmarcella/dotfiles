@@ -1,4 +1,4 @@
-source $HOME/.custom/lambda-sh/lambda.sh
+source "$HOME/.custom/lambda-sh/lambda.sh"
 
 # For helper functions to use when 
 export __AZURE_VM_LAST_VM="";

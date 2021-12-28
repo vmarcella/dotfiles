@@ -10,6 +10,5 @@ alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa azlin
 
 alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
-# Pats factorio server connection info.
 alias factorio_server_connect='wg-quick up /etc/wireguard/wg0.conf'
 alias factorio_server_disconnect='wg-quick down /etc/wireguard/wg0.conf'
