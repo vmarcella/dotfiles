@@ -2,20 +2,19 @@
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'flazz/vim-colorschemes'
-Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder
-Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation
-Plug 'scrooloose/nerdtree'                      " File explorer
-Plug 'vim-airline/vim-airline'                  " Status line with buffers shown
-Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer
-Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'
-Plug 'neoclide/coc.nvim', {'branch':'release'}  " Auto completion for all langs
-Plug 'ryanoasis/vim-devicons'                   " devicons
-Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor
-Plug 'lilydjwg/colorizer'                       " Colorize hex color codes
-Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events
-Plug 'tpope/vim-obsession'                      " Persist state of vim
-Plug 'tikhomirov/vim-glsl'                      " GLSL shading for vim.
+Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder.
+Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation.
+Plug 'scrooloose/nerdtree'                      " File explorer.
+Plug 'vim-airline/vim-airline'                  " Powerline with buffers.
+Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer.
+Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'.
+Plug 'neoclide/coc.nvim', {'branch':'release'}  " Intellisense engine for LSPs.
+Plug 'ryanoasis/vim-devicons'                   " Icon pack.
+Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor.
+Plug 'lilydjwg/colorizer'                       " Colorize hex color codes.
+Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events.
+Plug 'tpope/vim-obsession'                      " Persist state of vim.
+Plug 'tikhomirov/vim-glsl'                      " GLSL syntax shading for vim.
 
 call plug#end() " Init all plugins
 
@@ -62,35 +61,33 @@ let g:coc_global_extensions = [
 syntax on                        " Turn syntax highlighting on.
 set nowrap                       " Don't wrap lines.
 set backspace=indent,eol,start   " Backspace over anything.
-set autoindent                   " Auto indents, at least I think
-set smartindent                   " Copy previous indentation of autoindent.
-set number                       " set line numbers
-set tabstop=2 shiftwidth=2       " Tabbing is always 4 spaces (hard tabs)
+set autoindent                   " Auto indent based on the current line.
+set smartindent                  " Indent based upon language syntax.
+set number                       " set line numbers.
+set tabstop=2 shiftwidth=2       " Tabbing is always 2 spaces (hard tabs)
 set expandtab                    " Insert tabs at the start of the line.
 set showmatch                    " Show matching parantheses.
 set visualbell                   " Don't beep
 set noerrorbells                 " Plz don't beep
 set hidden                       " Allow hidden buffers to exist.
-set backup                       " Setup backup
-set backupdir=$HOME/.vim/backup/ " Where to save backup files
-set noswapfile                   " Remove the swap file
-set dir=$HOME/.vim/swap/         " Swap file home location
-set background=dark              " Set the background dark
-set t_Co=256                     " Set the terminal to use 256 colors
-set autoread                     " poll for file updates automatically
-set clipboard=unnamed        " Allows access to the global clipboard
-set foldmethod=syntax            " Set the fold method to rely on the language
-set encoding=UTF-8               " UTF-8 character encodings
-set exrc                         " enable per project configurations
+set backup                       " Setup backup.
+set backupdir=$HOME/.vim/backup/ " Where to save backup files. 
+set dir=$HOME/.vim/swap/         " Swap file home location.
+set background=dark              " Use a dark background.
+set t_Co=256                     " Set the terminal to use 256 colors.
+set autoread                     " poll for file updates automatically.
+set clipboard=unnamedplus        " Yanking will copy to the system clipboard.
+set foldmethod=syntax            " Fold code based on the language syntax.
+set encoding=UTF-8               " UTF-8 character encodings.
+set exrc                         " enable per project configurations.
 set secure                       " disable autocmd in files not owned by me.
-set splitbelow                   " Allows split to below
-set splitright                   " Always split to the right
-set cmdheight=1                  " Set the cmd height
+set splitbelow                   " Always vertical split to below.
+set splitright                   " Always horizontal split to the right.
+set cmdheight=1                  " Set the cmd height.
 set updatetime=300               " Change the update time.
-set mouse=a
+set mouse=a                      " Enable mouse support without copy/paste.
 
 
-" Set splits to be default on the bottom and right.
 
 " -------------------------------- ETC CONFIG ----------------------------------
 
@@ -211,36 +208,44 @@ endfunction
 " Highlight the symbol and all it's references.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Rename symbols nmap <leader>rn <Plug>(coc-rename)
-
-" Remap keys for applying codeAction to the current line.
+" List all actions that can be taken on the current line.
 nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
+
+" Apply auto-fix (Usually the first option) to the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+" Select all of the inner function body in visual/operator mode.
 xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
+
+" Select all of the function in visual/operator mode.
+xmap af <Plug>(coc-funcobj-a)
 omap af <Plug>(coc-funcobj-a)
 
 " Use <TAB> for selection ranges.
 nmap <silent> <TAB> <Plug>(coc-range-select)
 xmap <silent> <TAB> <Plug>(coc-range-select)
 
-" Mappings using CoCList:
-" Show all diagnostics.
+" Show all diagnostics for the current project.
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
+
+" Manage Coc extensions.
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
+
+" Show COC commands available for the current project.
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
+
+" Find a symbol within current document.
 nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
+
+" Search workspace for symbols. (Project searching)
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+
 " Do default action for next item.
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
