@@ -6,7 +6,9 @@
 
 # ----------------------------------- FETCH ------------------------------------
 
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+config() {
+    /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
+}
 
 pushd "$HOME" > /dev/null
 
@@ -18,7 +20,8 @@ git clone --bare --recurse-submodules \
 # ----------------------------------- BACKUP -----------------------------------
 
 mkdir -p .dotfiles-backup
-config checkout 2>&1 | egrep "\s+\." \
+config checkout 2>&1 \
+    | egrep "\s+\." \
     | awk {'print $1'} \
     | xargs -I{} mv {} .dotfiles-backup/{}
 
