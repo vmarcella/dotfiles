@@ -153,8 +153,8 @@ export TERM=xterm-256color
 
 # Node virtual env setup
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Setup the powerline daemon for bash.
 powerline-daemon -q
@@ -163,6 +163,11 @@ POWERLINE_BASH_SELECT=1
 . /usr/share/powerline/bindings/bash/powerline.sh
 
 # -------------------------------- DEPENDENCIES --------------------------------
+
+source "$HOME/.custom/bash/aliases.sh"
+source "$HOME/.custom/azure/vm.sh"
+
+# --------------------------------- FUNCTIONS ----------------------------------
 
 #Vim wrapper to allow control keys to be passed to vim
 vim(){
@@ -185,6 +190,3 @@ setStylusMonitor() {
     xsetwacom set "HID 256c:006d Pen stylus" MapToOutput "HEAD-$1" && \
     echo "Set the stylus to use monitor $1."
 }
-
-# Load azure extensions
-source ~/.custom/azure/vm.sh
