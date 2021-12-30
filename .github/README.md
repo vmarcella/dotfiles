@@ -7,7 +7,7 @@ This repository contains a script `install_dotfiles.sh` inside of
 `.custom/bash/install_dotfiles.sh`. For ease of setup, all you need to run is:
 
 ```bash
-curl -Lks https://github.com/vmarcella/dotfiles/blob/master/.custom/bash/install_dotfiles.sh | /bin/bash
+curl -Lks https://raw.githubusercontent.com/vmarcella/dotfiles/master/.custom/bash/install_dotfiles.sh | /bin/bash
 ```
 
 This will fetch the install script as a string and feed it into bash. This will 
@@ -28,6 +28,7 @@ scripts below.
 ```bash
 ./.custom/manjaro/install.sh
 ```
+Tested on Manjaro 18.0+
 
 ### Ubuntu
 ```bash
