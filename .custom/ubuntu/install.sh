@@ -1,5 +1,6 @@
 install_deps() {
-    sudo apt install build-essential \
+    sudo apt install \
+        build-essential \
         libssl-dev \
         curl \
         wget \
@@ -8,7 +9,7 @@ install_deps() {
         pkg-config \
         libgflags-dev \
         apt-transport-https \
-        cmake \ gcc \
+        cmake \
         g++ \
         make \
         xclip \
@@ -21,7 +22,7 @@ install_deps() {
 }
 
 install_python() {
-    sudo apt install python3-pip python-pip
+    sudo apt install python3-pip
     pip3 install --user virtualenv virtualenvwrapper
 }
 
@@ -38,7 +39,8 @@ install_java() {
 }
 
 install_node() {
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh \
+        | bash
 }
 
 install_langs() {
@@ -51,20 +53,22 @@ install_langs() {
 
 install_tmux() {
     sudo apt install tmux
-    pushd "$HOME"
+    pushd "$HOME" > /dev/null
     git clone https://github.com/gpakosz/.tmux
     ln -s -f .tmux/.tmux.conf
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    popd
+    popd > /dev/null  #$HOME
 }
 
 install_neovim() {
     sudo add-apt-repository ppa:neovim-ppa/unstable
     sudo apt update
     sudo apt install neovim
+
     pip3 install --user neovim
-    mkdir -p $HOME/.vim/swap
-    mkdir -p $HOME/.vim/backup
+
+    mkdir -p "$HOME/.vim/swap"
+    mkdir -p "$HOME/.vim/backup"
 }
 
 install_vim_plugged() {
@@ -73,12 +77,7 @@ install_vim_plugged() {
 }
 
 install_powerline_status() {
-    pushd "$HOME/.custom"
-    pip3 install --user powerline-status
-    pip3 install --user powerline-gitstatus
-    cp shell_theme.json "$HOME/.local/lib/python3.7/site-packages/powerline/config_files/themes/shell/default.json"
-    cp shell_colorscheme.json "$HOME/.local/lib/python3.7/site-packages/powerline/config_files/colorschemes/shell/default.json"
-    popd
+    sudo apt install powerline
 }
 
 install_docker() {
@@ -90,7 +89,8 @@ install_docker() {
 
 install_bazel() {
     curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
-    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" \
+        | sudo tee /etc/apt/sources.list.d/bazel.list
     sudo apt update && sudo apt install bazel
 }
 
@@ -115,18 +115,7 @@ install_gcloud() {
 }
 
 install_clangd() {
-    pushd "$(mktemp -d)"
-    wget \
-        https://github.com/clangd/clangd/releases/download/10rc3/clangd-linux-10rc3.zip \
-        -O clangd.zip
-    unzip clangd.zip
-
-    pushd clangd_10rc3
-    mv bin/clangd "$HOME/.local/bin"
-    mv -u lib/clang "$HOME/.local/lib"
-    popd  # clangd_10rc3
-
-    popd  # mktemp -d
+    sudo apt install clangd-10
 }
 
 install_tools() {
@@ -136,8 +125,8 @@ install_tools() {
     install_powerline_status
     install_docker
     install_bazel
-    install_grpc_cli
-    install_gcloud
+    # install_grpc_cli
+    # install_gcloud
     install_clangd
 }
 
