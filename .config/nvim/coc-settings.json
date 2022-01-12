@@ -5,6 +5,7 @@
       "opengl",
       "winit"
     ],
+    "rust-analyzer.diagnostics.disabled": ["inactive-code"],
     "languageserver": {
         "zls": {
             "command": "/home/cenz/zls/zig-out/bin/zls",
