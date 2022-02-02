@@ -1,11 +1,12 @@
 {
-    "omnisharp.useDotnet": true,
-    "coc.preferences.formatOnSaveFiletypes":["rust", "python", "typescript"],
+    "coc.preferences.formatOnSaveFiletypes":["rust", "python"],
     "cSpell.userWords": [
       "opengl",
       "winit"
     ],
     "rust-analyzer.diagnostics.disabled": ["inactive-code"],
+    "vetur.useWorkspaceDependencies":true,
+    "eslint.autoFixOnSave":true,
     "languageserver": {
         "zls": {
             "command": "/home/cenz/zls/zig-out/bin/zls",

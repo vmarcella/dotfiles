@@ -53,7 +53,8 @@ let g:coc_global_extensions = [
     \ 'coc-go',
     \ 'coc-pyright',
     \ 'coc-spell-checker',
-    \ 'coc-yaml'
+    \ 'coc-yaml',
+    \ 'coc-vetur'
     \ ]
 
 " -------------------------------- VIM CONFIG ----------------------------------
@@ -87,12 +88,10 @@ set cmdheight=1                  " Set the cmd height.
 set updatetime=300               " Change the update time.
 set mouse=a                      " Enable mouse support without copy/paste.
 
-
-
 " -------------------------------- ETC CONFIG ----------------------------------
 
 set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim    " Add golang linter
-autocmd BufNewFile,BufRead *.vue set filetype=html " Set Vue to use html plugins
+" autocmd BufNewFile,BufRead *.vue set filetype=typescript " Set Vue to use html plugins
 filetype plugin indent on                          " Enable plugin indent
 
 " ------------------------------------ COLORS ----------------------------------
