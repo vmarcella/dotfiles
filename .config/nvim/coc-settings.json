@@ -5,6 +5,14 @@
       "winit"
     ],
     "rust-analyzer.diagnostics.disabled": ["inactive-code"],
+    "python.venvFolders": [
+        "envs",
+        ".pyenv",
+        ".direnv",
+        ".cache/pypoetry/virtualenvs"
+    ],
+    "python.formatting.provider":"black",
+    "python.formatting.blackPath": "black",
     "vetur.useWorkspaceDependencies":true,
     "eslint.autoFixOnSave":true,
     "languageserver": {
