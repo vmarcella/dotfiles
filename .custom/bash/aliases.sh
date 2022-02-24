@@ -12,3 +12,6 @@ alias steam='flatpak run --filesystem=/yeet com.valvesoftware.Steam'
 
 alias factorio_server_connect='wg-quick up /etc/wireguard/wg0.conf'
 alias factorio_server_disconnect='wg-quick down /etc/wireguard/wg0.conf'
+
+# For Manjaro mirror configuration.
+alias update_mirrors='sudo pacman-mirrors -c United_States'
