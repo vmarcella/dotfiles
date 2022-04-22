@@ -1,7 +1,6 @@
 " ------------------------------------ PLUGINS ---------------------------------
 
 call plug#begin('~/.vim/plugged')
-
 Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder.
 Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation.
 Plug 'scrooloose/nerdtree'                      " File explorer.
@@ -29,13 +28,21 @@ let g:airline#extensions#tabline#enabled = 1
 " enable rainbow plugin at startup
 let g:rainbow_active = 1
 
-
 " ------------------------------------ RIPGREP ---------------------------------
 
 if executable('rg')
     set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
     let g:ctrlp_use_caching = 0
+endif
+
+" ------------------------------- YANK FOR WINDOWS -----------------------------
+
+if system('uname -r') =~ "microsoft"
+    augroup Yank
+        autocmd!
+        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
+        augroup END
 endif
 
 " ------------------------------------ COC --------------------------------
