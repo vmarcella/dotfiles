@@ -5,6 +5,7 @@
       "winit"
     ],
     "rust-analyzer.diagnostics.disabled": ["inactive-code"],
+    "rust-analyzer.inlayHints.enable": false,
     "python.venvFolders": [
         "envs",
         ".pyenv",
