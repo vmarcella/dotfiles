@@ -1,3 +1,5 @@
+#!/bin/bash
+
 install_deps() {
     sudo apt install \
         build-essential \
@@ -13,21 +15,21 @@ install_deps() {
         g++ \
         make \
         xclip \
-        python3-dev \
-        python-dev \
         ripgrep \
         xorg-dev \
-        libglu1-mesa-dev
+        libglu1-mesa-dev \
+        zsh \
         tree
 }
 
 install_python() {
-    sudo apt install python3-pip
+    sudo apt install python3-pip python3-dev
     pip3 install --user virtualenv virtualenvwrapper
 }
 
 install_rust() {
     curl https://sh.rustup.rs -sSf | sh
+    rustup toolchain install nightly
 }
 
 install_golang() {
@@ -41,6 +43,8 @@ install_java() {
 install_node() {
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh \
         | bash
+
+    nvm install 16.15.0
 }
 
 install_langs() {
@@ -87,33 +91,6 @@ install_docker() {
     sudo systemctl enable docker
 }
 
-install_bazel() {
-    curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
-    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" \
-        | sudo tee /etc/apt/sources.list.d/bazel.list
-    sudo apt update && sudo apt install bazel
-}
-
-install_grpc_cli() {
-    pushd "$(mktemp -d)"
-    git clone https://github.com/grpc/grpc.git ./
-    git submodule update --init
-    make -j 6 grpc_cli
-    mv ./bins/opt/grpc_cli ~/.local/bin/grpc_cli
-    popd  # mktemp -d
-}
-
-install_gcloud() {
-    # Add the Cloud SDK distribution URI as a package source
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-
-    # Import the Google Cloud Platform public key
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-
-    # Update the package list and install the Cloud SDK
-    sudo apt-get update && sudo apt-get install google-cloud-sdk
-}
-
 install_clangd() {
     sudo apt install clangd-10
 }
@@ -124,9 +101,6 @@ install_tools() {
     install_vim_plugged
     install_powerline_status
     install_docker
-    install_bazel
-    # install_grpc_cli
-    # install_gcloud
     install_clangd
 }
 
