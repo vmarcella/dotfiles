@@ -1,6 +1,11 @@
 {
     "coc.preferences.formatOnSaveFiletypes":["rust", "python"],
     "cSpell.userWords": [
+      "Swapchain",
+      "VMSS",
+      "azurecr",
+      "icms",
+      "onebranch",
       "opengl",
       "winit"
     ],
