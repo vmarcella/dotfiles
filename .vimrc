@@ -1,6 +1,7 @@
 " ------------------------------------ PLUGINS ---------------------------------
 
 call plug#begin('~/.vim/plugged')
+
 Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder.
 Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation.
 Plug 'scrooloose/nerdtree'                      " File explorer.
@@ -14,6 +15,7 @@ Plug 'lilydjwg/colorizer'                       " Colorize hex color codes.
 Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events.
 Plug 'tpope/vim-obsession'                      " Persist state of vim.
 Plug 'tikhomirov/vim-glsl'                      " GLSL syntax shading for vim.
+Plug 'github/copilot.vim'
 
 call plug#end() " Init all plugins
 
@@ -38,12 +40,12 @@ endif
 
 " ------------------------------- YANK FOR WINDOWS -----------------------------
 
-if system('uname -r') =~ "microsoft"
-    augroup Yank
-        autocmd!
-        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
-        augroup END
-endif
+" if system('uname -r') =~ "microsoft"
+"    augroup Yank
+"        autocmd!
+"        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
+"        augroup END
+" endif
 
 " ------------------------------------ COC --------------------------------
 
@@ -84,7 +86,7 @@ set dir=$HOME/.vim/swap/         " Swap file home location.
 set background=dark              " Use a dark background.
 set t_Co=256                     " Set the terminal to use 256 colors.
 set autoread                     " poll for file updates automatically.
-set clipboard=unnamedplus        " Yanking will copy to the system clipboard.
+" set clipboard=unnamedplus      " Yanking will copy to the system clipboard.
 set foldmethod=syntax            " Fold code based on the language syntax.
 set encoding=UTF-8               " UTF-8 character encodings.
 set exrc                         " enable per project configurations.
@@ -123,7 +125,7 @@ hi! cppStructure ctermfg=226
 " Highlight text longer than 80 chars.
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
-"
+
 " ------------------------------------ INPUT -----------------------------------
 
 " Go to normal mode and quit once in it
@@ -144,7 +146,7 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 map <C-N> :NERDTreeToggle %<CR>
 let NERDTreeShowHidden=1
 
-" Disable high lighting.
+" Disable highlighting.
 nnoremap \\ :noh<return>
 
 " Setup for vim splits. This lets you easily travel between splits.
@@ -163,12 +165,17 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
-" Use tab for trigger completion with characters ahead and navigate.
+" Remap for complete
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+" remap for complete to use tab and <cr>
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+        \ coc#pum#visible() ? coc#pum#next(1):
+        \ <SID>check_back_space() ? "\<Tab>" :
+        \ coc#refresh()
+
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -180,15 +187,6 @@ nmap <leader>rn <Plug>(coc-rename)
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
