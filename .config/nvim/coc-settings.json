@@ -11,6 +11,12 @@
     ],
     "rust-analyzer.diagnostics.disabled": ["inactive-code"],
     "rust-analyzer.inlayHints.enable": false,
+    "rust-analyzer.rustfmt.overrideCommand": [
+      "rustup",
+      "run",
+      "nightly",
+      "rustfmt"
+    ],
     "python.venvFolders": [
         "envs",
         ".pyenv",
