@@ -55,9 +55,8 @@ setopt SHARE_HISTORY
 
 # ----------------------------------- EXPORTS ----------------------------------
 
-
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
 export EDITOR=nvim
 export TERM=xterm-256color
 

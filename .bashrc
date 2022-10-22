@@ -147,7 +147,7 @@ shopt -s histappend
 export PROMPT_COMMAND="${PROMPT_COMMAND}${PROMPT_COMMAND:+;}history -a; history -n"
 
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
 export EDITOR=nvim
 export TERM=xterm-256color
 
@@ -190,3 +190,4 @@ setStylusMonitor() {
     xsetwacom set "HID 256c:006d Pen stylus" MapToOutput "HEAD-$1" && \
     echo "Set the stylus to use monitor $1."
 }
+. "$HOME/.cargo/env"
