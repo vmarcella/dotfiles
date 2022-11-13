@@ -67,8 +67,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # -------------------------------- DEPENDENCIES --------------------------------
 
-source "$HOME/.custom/bash/aliases.sh"
-source "$HOME/.custom/azure/vm.sh"
+source "$HOME/.custom/bash/common.sh"
 
 # ---------------------------------- FUNCTIONS ---------------------------------
 

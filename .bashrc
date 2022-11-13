@@ -164,8 +164,7 @@ POWERLINE_BASH_SELECT=1
 
 # -------------------------------- DEPENDENCIES --------------------------------
 
-source "$HOME/.custom/bash/aliases.sh"
-source "$HOME/.custom/azure/vm.sh"
+source "$HOME/.custom/bash/common.sh"
 
 # --------------------------------- FUNCTIONS ----------------------------------
 
