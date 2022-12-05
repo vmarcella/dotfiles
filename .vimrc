@@ -15,7 +15,10 @@ Plug 'lilydjwg/colorizer'                       " Colorize hex color codes.
 Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events.
 Plug 'tpope/vim-obsession'                      " Persist state of vim.
 Plug 'tikhomirov/vim-glsl'                      " GLSL syntax shading for vim.
-Plug 'github/copilot.vim'
+Plug 'github/copilot.vim'                       " Copilot for vim.
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 
 call plug#end() " Init all plugins
 
@@ -132,15 +135,21 @@ match OverLength /\%81v.\+/
 inoremap <silent> jj <ESC>
 nnoremap <silent> ;; :q<CR>
 
-" Buffers - explore/next/previous (Bufexplorer plugin)
-nnoremap <silent> 00 :BufExplorer<CR>
-nnoremap <silent> 99 :bn<CR>
-nnoremap <silent> 88 :bp<CR>
-
 " Key mapping for saving via ctrl-s in all modes
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
+
+" Telescope mappings
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" Buffers - explore/next/previous (Bufexplorer plugin)
+nnoremap <silent> 00 :BufExplorer<CR>
+nnoremap <silent> 99 :bn<CR>
+nnoremap <silent> 88 :bp<CR>
 
 " Key mapping for nerdtree
 map <C-N> :NERDTreeToggle %<CR>
