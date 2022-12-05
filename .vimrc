@@ -118,7 +118,7 @@ hi! Type ctermfg=121
 hi! LineNr ctermfg=226
 
 " Coc
-hi! CocFloating ctermfg=152 ctermbg=234
+" hi! CocFloating ctermfg=152 ctermbg=234
 
 " C++
 " hi! cppSTLFunction ctermfg=231
