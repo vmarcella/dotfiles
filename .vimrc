@@ -2,7 +2,6 @@
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'ctrlpvim/ctrlp.vim'                       " Fuzzy file finder.
 Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation.
 Plug 'scrooloose/nerdtree'                      " File explorer.
 Plug 'vim-airline/vim-airline'                  " Powerline with buffers.
@@ -20,6 +19,12 @@ Plug 'github/copilot.vim'                       " Copilot for vim.
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 
+
+" --- DISABLED ---
+"
+" Fuzzy file finder.
+" Plug 'ctrlpvim/ctrlp.vim' 
+
 call plug#end() " Init all plugins
 
 " ------------------------------------ AIRLINE ---------------------------------
@@ -35,11 +40,11 @@ let g:rainbow_active = 1
 
 " ------------------------------------ RIPGREP ---------------------------------
 
-if executable('rg')
-    set grepprg=rg\ --color=never
-    let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
-    let g:ctrlp_use_caching = 0
-endif
+" if executable('rg')
+"    set grepprg=rg\ --color=never
+"    let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
+"    let g:ctrlp_use_caching = 0
+" endif
 
 " ------------------------------- YANK FOR WINDOWS -----------------------------
 
@@ -141,7 +146,7 @@ vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
 " Telescope mappings
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <C-P> <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
