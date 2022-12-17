@@ -146,10 +146,10 @@ vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
 " Telescope mappings
-nnoremap <C-P>f <cmd>Telescope find_files<cr>
-nnoremap <C-P>g <cmd>Telescope live_grep<cr>
-nnoremap <C-P>b <cmd>Telescope buffers<cr>
-nnoremap <C-P>h <cmd>Telescope help_tags<cr>
+nnoremap <C-P>j <cmd>Telescope find_files<cr>
+nnoremap <C-P>i <cmd>Telescope live_grep<cr>
+nnoremap <C-P>k <cmd>Telescope buffers<cr>
+nnoremap <C-P>l <cmd>Telescope help_tags<cr>
 
 " Buffers - explore/next/previous (Bufexplorer plugin)
 nnoremap <silent> 00 :BufExplorer<CR>
