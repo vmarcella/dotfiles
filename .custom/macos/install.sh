@@ -59,7 +59,7 @@ install_dev_tools() {
   install_vscode
   install_tmux
 
-  brew install keychain
+  brew install keychain cmake ninja
   brew install --cask iterm2
   brew install --cask docker
 }
