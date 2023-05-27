@@ -48,12 +48,13 @@ let g:rainbow_active = 1
 
 " ------------------------------- YANK FOR WINDOWS -----------------------------
 
-" if system('uname -r') =~ "microsoft"
-"    augroup Yank
-"        autocmd!
-"        autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
-"        augroup END
-" endif
+let s:clip = '/mnt/c/Windows/System32/clip.exe'
+if system('uname -r') =~ "microsoft" && executable(s:clip)
+    augroup WSLYank
+        autocmd!
+        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+    augroup END
+endif
 
 " ------------------------------------ COC --------------------------------
 
@@ -101,7 +102,7 @@ set exrc                         " enable per project configurations.
 set secure                       " disable autocmd in files not owned by me.
 set splitbelow                   " Always vertical split to below.
 set splitright                   " Always horizontal split to the right.
-set cmdheight=1                  " Set the cmd height.
+set cmdheight=0                  " Set the cmd height.
 set updatetime=300               " Change the update time.
 set mouse=a                      " Enable mouse support without copy/paste.
 
