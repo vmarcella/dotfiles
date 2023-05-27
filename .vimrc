@@ -102,7 +102,7 @@ set exrc                         " enable per project configurations.
 set secure                       " disable autocmd in files not owned by me.
 set splitbelow                   " Always vertical split to below.
 set splitright                   " Always horizontal split to the right.
-set cmdheight=0                  " Set the cmd height.
+set cmdheight=1                  " Set the cmd height.
 set updatetime=300               " Change the update time.
 set mouse=a                      " Enable mouse support without copy/paste.
 
