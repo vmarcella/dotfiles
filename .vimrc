@@ -2,23 +2,24 @@
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'sheerun/vim-polyglot'                     " Better syntax and indentation.
 Plug 'scrooloose/nerdtree'                      " File explorer.
 Plug 'vim-airline/vim-airline'                  " Powerline with buffers.
 Plug 'jlanzarotta/bufexplorer'                  " Buffer explorer.
 Plug 'airblade/vim-gitgutter'                   " Shows git diffs in 'gutter'.
-Plug 'neoclide/coc.nvim', {'branch':'release'}  " Intellisense engine for LSPs.
 Plug 'ryanoasis/vim-devicons'                   " Icon pack.
-Plug 'RRethy/vim-illuminate'                    " Highlight under the cursor.
+Plug 'RRethy/vm-illuminate'                    " Highlight under the cursor.
 Plug 'lilydjwg/colorizer'                       " Colorize hex color codes.
 Plug 'tmux-plugins/vim-tmux-focus-events'       " Grant tmux access to events.
 Plug 'tpope/vim-obsession'                      " Persist state of vim.
 Plug 'tikhomirov/vim-glsl'                      " GLSL syntax shading for vim.
 Plug 'github/copilot.vim'                       " Copilot for vim.
 
+" nvim specific plugins
+
+Plug 'neoclide/coc.nvim', {'branch':'release'}  
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
-
 
 " --- DISABLED ---
 "
@@ -26,6 +27,9 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 " Plug 'ctrlpvim/ctrlp.vim' 
 
 call plug#end() " Init all plugins
+
+" ----------------------------------- LUA --------------------------------------
+
 
 " ------------------------------------ AIRLINE ---------------------------------
 
@@ -37,6 +41,8 @@ let g:airline#extensions#tabline#enabled = 1
 
 " enable rainbow plugin at startup
 let g:rainbow_active = 1
+
+
 
 " ------------------------------------ RIPGREP ---------------------------------
 
@@ -92,8 +98,6 @@ set hidden                       " Allow hidden buffers to exist.
 set backup                       " Setup backup.
 set backupdir=$HOME/.vim/backup/ " Where to save backup files. 
 set dir=$HOME/.vim/swap/         " Swap file home location.
-set background=dark              " Use a dark background.
-set t_Co=256                     " Set the terminal to use 256 colors.
 set autoread                     " poll for file updates automatically.
 " set clipboard=unnamedplus      " Yanking will copy to the system clipboard.
 set foldmethod=syntax            " Fold code based on the language syntax.
@@ -112,24 +116,20 @@ set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim    " Add golang linter
 " autocmd BufNewFile,BufRead *.vue set filetype=typescript " Set Vue to use html plugins
 filetype plugin indent on                          " Enable plugin indent
 
+"
 " ------------------------------------ COLORS ----------------------------------
 
-hi! Comment ctermfg=246
-hi! String ctermfg=81
-hi! Number ctermfg=81
-hi! Float ctermfg=81
-hi! Constant ctermfg=231
-hi! Function ctermfg=203
-hi! Type ctermfg=121
-hi! LineNr ctermfg=226
+highlight! Comment ctermfg=246
+highlight! String ctermfg=81
+highlight! Number ctermfg=81
+highlight! Float ctermfg=81
+highlight! Constant ctermfg=231
+highlight! Function ctermfg=203
+highlight! Type ctermfg=121
+highlight! LineNr ctermfg=226
 
 " Coc
 " hi! CocFloating ctermfg=152 ctermbg=234
-
-" C++
-" hi! cppSTLFunction ctermfg=231
-" hi! cppSTLType ctermfg=231
-hi! cppStructure ctermfg=226
 
 " Highlight text longer than 80 chars.
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
@@ -167,6 +167,7 @@ nnoremap \\ :noh<return>
 " Setup for vim splits. This lets you easily travel between splits.
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
+"
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
@@ -268,3 +269,5 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+lua require('ts')
