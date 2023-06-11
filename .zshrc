@@ -58,7 +58,6 @@ setopt SHARE_HISTORY
 # Add the new .local/bin folder to the path for user specific data (weird)
 export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
 export EDITOR=nvim
-export TERM=xterm-256color
 
 # Node virtual env setup
 export NVM_DIR="$HOME/.nvm"
@@ -78,6 +77,10 @@ vim() {
     stty "$STTYOPTS"
 }
 
-autoload -Uz compinit
-compinit
+autoload -Uz compinit && compinit
+compdef _git config
+
 zstyle ':completion:*' menu select
+
+export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
