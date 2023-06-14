@@ -1,9 +1,10 @@
 {
-    "coc.preferences.formatOnSaveFiletypes":["rust", "python"],
+    "coc.preferences.formatOnSaveFiletypes":["rust", "python", "go"],
     "cSpell.userWords": [
       "Swapchain",
       "VMSS",
       "azurecr",
+      "dateutil",
       "icms",
       "onebranch",
       "opengl",
@@ -11,6 +12,7 @@
     ],
     "rust-analyzer.diagnostics.disabled": ["inactive-code"],
     "rust-analyzer.inlayHints.enable": false,
+    "suggest.noselect": false,
     "rust-analyzer.rustfmt.overrideCommand": [
       "rustup",
       "run",
@@ -23,6 +25,11 @@
         ".direnv",
         ".cache/pypoetry/virtualenvs"
     ],
+    "go.goPlsOption": {
+      "completeUnimported": true
+
+    },
+    "go.useLanguageServer": true,
     "python.formatting.provider":"black",
     "python.formatting.blackPath": "black",
     "vetur.useWorkspaceDependencies":true,
@@ -57,5 +64,6 @@
                 "-j=6"
             ]
         }
-    }
+    },
+    "snippets.ultisnips.pythonPrompt": false
 }
