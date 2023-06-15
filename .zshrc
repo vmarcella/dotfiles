@@ -71,7 +71,7 @@ source "$HOME/.custom/bash/common.sh"
 # ---------------------------------- FUNCTIONS ---------------------------------
 
 vim() {
-    local STTYOPTS="$(stty --save)"
+    local STTYOPTS="$(stty -g)"
     stty stop '' -ixoff
     command nvim "$@"
     stty "$STTYOPTS"
@@ -84,3 +84,7 @@ zstyle ':completion:*' menu select
 
 export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
+if [[ "$(uname -a)" =~ "Darwin" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
