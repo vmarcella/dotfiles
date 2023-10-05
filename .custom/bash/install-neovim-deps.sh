@@ -53,6 +53,9 @@ install_lsp() {
 
   # csharp_ls
   dotnet tool install --global csharp-ls
+
+
+  brew install marksman
  }
 
 install_diagnostics () {
