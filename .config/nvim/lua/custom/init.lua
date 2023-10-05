@@ -1,5 +1,8 @@
 vim.opt.colorcolumn = "80"
+vim.g.copilot_assume_mapped = true
 
+vim.keymap.set('i', '<M-j>', '<Plug>(copilot-next)')
+vim.keymap.set('i', '<M-k>', '<Plug>(copilot-previous)')
 
 vim.cmd([[
 " ------------------------------------ PLUGINS ---------------------------------
@@ -18,7 +21,7 @@ vim.cmd([[
 " Plug 'tikhomirov/vim-glsl'                      " GLSL syntax shading for vim.
 " Plug 'github/copilot.vim'                       " Copilot for vim.
 
-" nvim specific plugins
+" nvim specific plugins:V
 
 " Plug 'neoclide/coc.nvim', {'branch':'release'}  
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -57,6 +60,7 @@ vim.cmd([[
 " endif
 
 " ------------------------------- YANK FOR WINDOWS -----------------------------
+
 
 let s:clip = '/mnt/c/Windows/System32/clip.exe'
 if system('uname -r') =~ "microsoft" && executable(s:clip)
@@ -123,21 +127,14 @@ filetype plugin indent on                          " Enable plugin indent
 "
 " ------------------------------------ COLORS ----------------------------------
 
-highlight! Comment ctermfg=246
-highlight! String ctermfg=81
-highlight! Number ctermfg=81
-highlight! Float ctermfg=81
-highlight! Constant ctermfg=231
-highlight! Function ctermfg=203
-highlight! Type ctermfg=121
-highlight! LineNr ctermfg=226
-
-" Coc
-" hi! CocFloating ctermfg=152 ctermbg=234
-
-" Highlight text longer than 80 chars.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
+" highlight! Comment ctermfg=246
+" highlight! String ctermfg=81
+" highlight! Number ctermfg=81
+" highlight! Float ctermfg=81
+" highlight! Constant ctermfg=231
+" highlight! Function ctermfg=203
+" highlight! Type ctermfg=121
+" highlight! LineNr ctermfg=226
 
 " ------------------------------------ INPUT -----------------------------------
 

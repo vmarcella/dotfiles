@@ -1,7 +1,7 @@
 local plugins = {
   {
     "github/copilot.vim",
-    lazy=false
+    lazy=false,
   },
   {
     "nvim-treesitter/nvim-treesitter",
