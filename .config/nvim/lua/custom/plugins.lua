@@ -4,6 +4,14 @@ local plugins = {
     lazy=false,
   },
   {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "gopls"
+      }
+    },
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
@@ -28,7 +36,7 @@ local plugins = {
         "markdown"
       }
     }
- },
+  },
   {
     "neovim/nvim-lspconfig",
     -- Add null-ls for linter support.
@@ -42,7 +50,22 @@ local plugins = {
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end,
-  }
+  },
+  {
+    "mfussenegger/nvim-dap",
+    config = function()
+      require("core.utils").load_mappings("dap")
+    end,
+  },
+  {
+    "dreamsofcode-io/nvim-dap-go",
+    ft = "go",
+    dependencies = {"mfussenegger/nvim-dap"},
+    config = function(_, opts)
+      require("dap-go").setup(opts)
+      require("core.utils").load_mappings("dap_go")
+    end,
+  },
 }
 
 

@@ -1,4 +1,5 @@
 local null_ls = require "null-ls"
+local augroup = vim.api.nvim_create_augroup("LSPFormatting", {})
 
 local completion = null_ls.builtins.completion
 local formatting = null_ls.builtins.formatting
@@ -44,6 +45,7 @@ local sources = {
   formatting.fixjson,
   formatting.gofmt,
   formatting.goimports,
+  formatting.golines,
   formatting.isort,
   formatting.lua_format,
   formatting.markdownlint,
@@ -73,9 +75,7 @@ null_ls.setup {
               group = augroup,
               buffer = bufnr,
               callback = function()
-                -- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-                -- on later neovim version, you should use vim.lsp.buf.format({ async = false }) instead
-                vim.lsp.buf.format({ async = false })
+                vim.lsp.buf.format({ bufnr = bufnr })
               end,
           })
       end
