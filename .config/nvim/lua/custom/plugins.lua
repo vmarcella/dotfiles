@@ -10,6 +10,9 @@ local plugins = {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
+        -- rust
+        "rust-analyzer",
+
         -- Golang
         "gopls",
 
@@ -62,6 +65,24 @@ local plugins = {
       require "custom.configs.lspconfig"
     end,
   },
+  {
+    "rust-lang/rust.vim",
+    ft = "rust",
+    config = function()
+      vim.g.rustfmt_autosave = 1
+    end
+  },
+  {
+    "simrat39/rust-tools.nvim",
+    dependencies =  "neovim/nvim-lspconfig",
+    ft = "rust",
+    opts = function ()
+      return require "custom.configs.rust-tools"
+    end,
+    config = function(_, opts)
+      require('rust-tools').setup(opts)
+    end
+  },
   -- Debuggers
   {
     -- Debugger adapter protocol client.
@@ -100,6 +121,7 @@ local plugins = {
     end,
   },
   {
+    -- DAP for python
     "mfussenegger/nvim-dap-python",
     ft = "python",
     dependencies = {

@@ -53,6 +53,22 @@ lspconfig.gopls.setup {
   }
 }
 
+-- Manual setup for rust_analyzer
+lspconfig.rust_analyzer.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "rust" },
+  root_dir = util.root_pattern("Cargo.toml"),
+  settings = {
+    ['rust-analyzer'] = {
+      cargo = {
+        allFeatures = true,
+      }
+    }
+  }
+
+}
+
 -- Manual setup for pyright
 lspconfig.pyright.setup {
   on_attach = on_attach,
