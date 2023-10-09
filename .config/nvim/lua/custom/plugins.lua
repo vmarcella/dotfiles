@@ -27,10 +27,31 @@ local plugins = {
         "typescript-language-server",
         "eslint-lsp",
         "prettier",
-        "js-debug-adapter"
+        "js-debug-adapter",
 
-      }
-    },
+        -- markdown
+        "marksman",
+        "markdownlint",
+
+  
+        -- lua
+        "luacheck",
+        "stylua",
+
+        -- terraform
+        "tflint",
+        "tfsec",
+
+        -- yaml
+        "yamllint",
+        "yamlfmt",
+        "yamlfix",
+        "yaml-language-server",
+
+        -- vim
+        "vim-language-server"
+      },
+    }
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -174,8 +195,7 @@ local plugins = {
       require("core.utils").load_mappings("dap_python")
 
     end,
-  }
+  },
 }
-
 
 return plugins
