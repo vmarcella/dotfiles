@@ -12,7 +12,6 @@ local servers = {
   "rust_analyzer",
   "eslint",
   "gopls",
-  "pyright",
   "vimls",
   "terraformls",
   "tsserver",
@@ -35,6 +34,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+-- Manual setup for gopls
 lspconfig.gopls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -51,4 +51,11 @@ lspconfig.gopls.setup {
       },
     }
   }
+}
+
+-- Manual setup for pyright
+lspconfig.pyright.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "python" },
 }
