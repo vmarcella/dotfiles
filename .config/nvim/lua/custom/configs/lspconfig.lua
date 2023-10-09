@@ -9,12 +9,9 @@ local servers = {
   "bicep",
   "cmake",
   "cssls",
-  "rust_analyzer",
   "eslint",
-  "gopls",
   "vimls",
   "terraformls",
-  "tsserver",
   "yamlls",
   "lua_ls",
   "jsonls",
@@ -74,4 +71,15 @@ lspconfig.pyright.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "python" },
+}
+
+-- Manual setup for typescript
+lspconfig.tsserver.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  init_options = {
+    preferences = {
+      disableSuggestions = true,
+    }
+  }
 }
