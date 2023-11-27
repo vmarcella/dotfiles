@@ -81,9 +81,10 @@ local plugins = {
   },
   {
     "neovim/nvim-lspconfig",
-    -- Add null-ls for linter support.
+    -- Add null-ls for linter support. 
+    -- (none-ls is the community maintained version)
     dependencies = {
-      "jose-elias-alvarez/null-ls.nvim",
+      "nvimtools/none-ls.nvim",
       config = function()
         require "custom.configs.null-ls"
       end,
