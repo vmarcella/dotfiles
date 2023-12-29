@@ -1,3 +1,4 @@
+#!/bin/bash 
 
 install_lsp() {
   # bashls
@@ -15,7 +16,7 @@ install_lsp() {
   sudo mv ./bicep /usr/local/bin/bicep
 
   # cmake
-  pip install --user --upgrade cmake-language-server
+  pip3 install --user --upgrade cmake-language-server
 
   # dockerls
   npm install -g dockerfile-language-server-nodejs
@@ -31,7 +32,7 @@ install_lsp() {
   go install golang.org/x/tools/gopls@latest
 
   # pyrirght
-  pip install --user --upgrade pyright
+  pip3 install --user --upgrade pyright
 
   # vimls
   npm install -g vim-language-server
@@ -152,9 +153,6 @@ install_formatters () {
 
   # yamlfmt
   go install github.com/google/yamlfmt/cmd/yamlfmt@latest
-
-
-
 }
 
 install_neovim_dependencies() {
@@ -162,3 +160,5 @@ install_neovim_dependencies() {
   install_diagnostics
   install_formatters
 }
+
+install_neovim_dependencies
