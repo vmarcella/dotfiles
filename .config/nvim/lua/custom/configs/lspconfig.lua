@@ -25,10 +25,7 @@ local servers = {
 }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+  lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
 end
 
 -- Manual setup for gopls
@@ -42,10 +39,7 @@ lspconfig.gopls.setup {
     gopls = {
       completeUnimported = true,
       usePlaceholders = true,
-      analyses = {
-        unusedparams = true,
-        unreachable = true,
-      },
+      analyses = { unusedparams = true, unreachable = true },
     },
   },
 }
@@ -56,13 +50,7 @@ lspconfig.rust_analyzer.setup {
   capabilities = capabilities,
   filetypes = { "rust" },
   root_dir = util.root_pattern "Cargo.toml",
-  settings = {
-    ["rust-analyzer"] = {
-      cargo = {
-        allFeatures = true,
-      },
-    },
-  },
+  settings = { ["rust-analyzer"] = { cargo = { allFeatures = true } } },
 }
 
 -- Manual setup for pyright
@@ -76,11 +64,7 @@ lspconfig.pyright.setup {
 lspconfig.tsserver.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  init_options = {
-    preferences = {
-      disableSuggestions = true,
-    },
-  },
+  init_options = { preferences = { disableSuggestions = true } },
 }
 
 lspconfig.lua_ls.setup {

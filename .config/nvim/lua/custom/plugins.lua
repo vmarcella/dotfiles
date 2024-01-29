@@ -26,6 +26,7 @@ local plugins = {
         -- Docker
         "dockerfile-language-server",
         "docker-compose-language-service",
+        "hadolint",
 
         -- rust
         "rust-analyzer",
