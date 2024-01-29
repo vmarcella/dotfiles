@@ -51,7 +51,6 @@ local sources = {
   formatting.goimports,
   formatting.golines,
   formatting.isort,
-  formatting.lua_format,
   formatting.markdownlint,
   formatting.ruff,
   formatting.rustfmt,

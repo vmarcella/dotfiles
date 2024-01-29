@@ -73,7 +73,6 @@ local plugins = {
         -- lua
         "lua-language-server",
         "luacheck",
-        "luaformatter",
         "stylua",
 
         -- terraform
