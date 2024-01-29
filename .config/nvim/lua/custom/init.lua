@@ -1,10 +1,10 @@
 vim.opt.colorcolumn = "80"
 vim.g.copilot_assume_mapped = true
 
-vim.keymap.set('i', '<M-j>', '<Plug>(copilot-next)')
-vim.keymap.set('i', '<M-k>', '<Plug>(copilot-previous)')
+vim.keymap.set("i", "<M-j>", "<Plug>(copilot-next)")
+vim.keymap.set("i", "<M-k>", "<Plug>(copilot-previous)")
 
-vim.cmd([[
+vim.cmd [[
 " ------------------------------------ PLUGINS ---------------------------------
 
 " call plug#begin('~/.vim/plugged')
@@ -181,5 +181,4 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
-]])
-
+]]

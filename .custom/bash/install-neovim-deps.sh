@@ -1,164 +1,166 @@
-#!/bin/bash 
+#!/bin/bash
 
 install_lsp() {
-  # bashls
-  npm i -g bash-language-server
+	# bashls
+	npm i -g bash-language-server
 
-  # bicep
-   
-  # Fetch the latest Bicep CLI binary
-  curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-  #
-  # Mark it as executable
-  chmod +x ./bicep
-  #
-  # Add bicep to your PATH (requires admin)
-  sudo mv ./bicep /usr/local/bin/bicep
+	# bicep
 
-  # cmake
-  pip3 install --user --upgrade cmake-language-server
+	# Fetch the latest Bicep CLI binary
+	curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+	#
+	# Mark it as executable
+	chmod +x ./bicep
+	#
+	# Add bicep to your PATH (requires admin)
+	sudo mv ./bicep /usr/local/bin/bicep
 
-  # dockerls
-  npm install -g dockerfile-language-server-nodejs
+	# cmake
+	pip3 install --user --upgrade cmake-language-server
 
-  # cssls, eslint, json
-  npm i -g vscode-langservers-extracted
-  #
-  # Rust analyzer
-  rustup component add rust-src
-  rustup component add rust-analyzer
+	# dockerls
+	npm install -g dockerfile-language-server-nodejs
 
-  # gopls
-  go install golang.org/x/tools/gopls@latest
+	# cssls, eslint, json
+	npm i -g vscode-langservers-extracted
+	#
+	# Rust analyzer
+	rustup component add rust-src
+	rustup component add rust-analyzer
 
-  # pyrirght
-  pip3 install --user --upgrade pyright
+	# gopls
+	go install golang.org/x/tools/gopls@latest
 
-  # vimls
-  npm install -g vim-language-server
+	# pyrirght
+	pip3 install --user --upgrade pyright
 
-  # tsserver
-  npm install -g typescript-language-server
+	# vimls
+	npm install -g vim-language-server
 
-  # yamlls
-  npm install -g yaml-language-server
+	# tsserver
+	npm install -g typescript-language-server
 
-  # marksman
-  sudo snap install marksman
+	# yamlls
+	npm install -g yaml-language-server
 
-  # graphql
-  npm install -g graphql-language-service-cli
+	# marksman
+	sudo snap install marksman
 
-  # docker_compose_language_service
-  npm install @microsoft/compose-language-service
+	# graphql
+	npm install -g graphql-language-service-cli
 
-  # csharp_ls
-  dotnet tool install --global csharp-ls
+	# docker_compose_language_service
+	npm install -g @microsoft/compose-language-service
 
+	# csharp_ls
+	dotnet tool install --global csharp-ls
 
-  brew install marksman
- }
+	brew install marksman
+}
 
-install_diagnostics () {
-  # actionlint
-  go install github.com/rhysd/actionlint/cmd/actionlint@latest
+install_diagnostics() {
+	# actionlint
+	go install github.com/rhysd/actionlint/cmd/actionlint@latest
 
-  # Buf
-  npm install -g @bufbuild/buf
+	# Buf
+	npm install -g @bufbuild/buf
 
-  # checkmake
-  go install github.com/mrtazz/checkmake/cmd/checkmake@latest
+	# checkmake
+	go install github.com/mrtazz/checkmake/cmd/checkmake@latest
 
-  # cmake lint
-  pip install --user cmakelang
- 
-  # cpplint
-  pip install --user cpplint
+	# cmake lint
+	pip install --user cmakelang
 
-  # Install deno for deno_lint
-  curl -fsSL https://deno.land/x/install/install.sh | sh
- 
-  # dotenv_linter
-  curl -sSfL \
-    https://raw.githubusercontent.com/dotenv-linter/dotenv-linter/master/install.sh | sh -s
+	# cpplint
+	pip install --user cpplint
 
-  # flake8
-  pip install --user flake8
+	# Install deno for deno_lint
+	curl -fsSL https://deno.land/x/install/install.sh | sh
 
-  # Markdownlint
-  npm install -g markdownlint
+	# dotenv_linter
+	curl -sSfL \
+		https://raw.githubusercontent.com/dotenv-linter/dotenv-linter/master/install.sh | sh -s
 
-  # Install ruff & pylint
-  pip install --user ruff pylint[spelling]
+	# flake8
+	pip install --user flake8
 
-  # Install staticcheck
-  go install honnef.co/go/tools/cmd/staticcheck@latest
+	# Markdownlint
+	npm install -g markdownlint
 
-  # tfsec
-  curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+	# Install ruff & pylint
+	pip install --user ruff pylint[spelling]
 
-  # install typescript
-  npm install -g typescript
+	# Install staticcheck
+	go install honnef.co/go/tools/cmd/staticcheck@latest
 
-  # yamllint
-  pip install --user yamllint
+	# tfsec
+	curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+
+	# install typescript
+	npm install -g typescript
+
+	# yamllint
+	pip install --user yamllint
+
+	# Lua
+	brew install luarocks
 
 }
 
-install_formatters () {
-  #  # Install autoflake
-  pip install --user --upgrade autoflake 
+install_formatters() {
+	#  # Install autoflake
+	pip install --user --upgrade autoflake
 
-  # Install autopep8
-  pip install --user --upgrade autopep8
+	# Install autopep8
+	pip install --user --upgrade autopep8
 
-  # Install black
-  pip install black
+	# Install black
+	pip install black
 
-  # cbformat
-  cargo install cbfmt
+	# cbformat
+	cargo install cbfmt
 
-  # csharpier
-  dotnet tool install csharpier -g
+	# csharpier
+	dotnet tool install csharpier -g
 
-  #fixjson
-  npm install -g fixjson
+	#fixjson
+	npm install -g fixjson
 
-  # goimports
-  go install golang.org/x/tools/cmd/goimports@latest
+	# goimports
+	go install golang.org/x/tools/cmd/goimports@latest
 
-  # isort 
-  pip install --user isort
+	# isort
+	pip install --user isort
 
-  # shellharden
-  cargo install shellharden
+	# shellharden
+	cargo install shellharden
 
-  # shfmt
-  go install mvdan.cc/sh/v3/cmd/shfmt@latest
+	# shfmt
+	go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
-  # sqlfluff
-  pip install sqlfluff
+	# sqlfluff
+	pip install sqlfluff
 
-  # sql-formatter
-  npm install -g sql-formatter
+	# sql-formatter
+	npm install -g sql-formatter
 
-  # terrafmt
-  go install github.com/katbyte/terrafmt@latest
+	# terrafmt
+	go install github.com/katbyte/terrafmt@latest
 
-  # terraform & terraform-ls
-  sudo apt update && sudo apt install terraform terraform-ls
+	# terraform & terraform-ls
+	sudo apt update && brew install terraform terraform-ls
 
-  # textlint
-  npm install -g textlint 
+	# textlint
+	npm install -g textlint
 
-  # yamlfmt
-  go install github.com/google/yamlfmt/cmd/yamlfmt@latest
+	# yamlfmt
+	go install github.com/google/yamlfmt/cmd/yamlfmt@latest
 }
 
 install_neovim_dependencies() {
-  install_lsp
-  install_diagnostics
-  install_formatters
+	install_lsp
+	install_diagnostics
+	install_formatters
 }
 
 install_neovim_dependencies

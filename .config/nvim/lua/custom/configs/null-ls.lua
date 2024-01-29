@@ -22,6 +22,8 @@ local sources = {
   diagnostics.eslint,
   diagnostics.dotenv_linter,
   diagnostics.flake8,
+  diagnostics.mypy,
+  diagnostics.pyproject_flake8,
   diagnostics.luacheck,
   diagnostics.markdownlint,
   diagnostics.ruff,
@@ -31,7 +33,8 @@ local sources = {
   diagnostics.tsc,
   diagnostics.yamllint,
   diagnostics.zsh,
-
+  diagnostics.trivy,
+  diagnostics.hadolint,
 
   formatting.autoflake,
   formatting.autopep8,
@@ -44,6 +47,7 @@ local sources = {
   formatting.prettier,
   formatting.fixjson,
   formatting.gofmt,
+  formatting.gofumpt,
   formatting.goimports,
   formatting.golines,
   formatting.isort,
@@ -60,6 +64,8 @@ local sources = {
   formatting.textlint,
   formatting.yamlfmt,
   formatting.zigfmt,
+  formatting.stylua,
+  formatting.taplo,
 
   hover.dictionary,
   hover.printenv,
@@ -69,15 +75,15 @@ null_ls.setup {
   debug = true,
   sources = sources,
   on_attach = function(client, bufnr)
-      if client.supports_method("textDocument/formatting") then
-          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-          vim.api.nvim_create_autocmd("BufWritePre", {
-              group = augroup,
-              buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format({ async = true, bufnr = bufnr })
-              end,
-          })
-      end
+    if client.supports_method "textDocument/formatting" then
+      vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.format { async = true, bufnr = bufnr }
+        end,
+      })
+    end
   end,
 }
