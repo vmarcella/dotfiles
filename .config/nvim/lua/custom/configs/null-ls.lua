@@ -22,6 +22,8 @@ local sources = {
   diagnostics.eslint,
   diagnostics.dotenv_linter,
   diagnostics.flake8,
+  diagnostics.mypy,
+  diagnostics.pyproject_flake8,
   diagnostics.luacheck,
   diagnostics.markdownlint,
   diagnostics.ruff,
@@ -31,6 +33,7 @@ local sources = {
   diagnostics.tsc,
   diagnostics.yamllint,
   diagnostics.zsh,
+  diagnostics.trivy,
 
 
   formatting.autoflake,
@@ -44,6 +47,7 @@ local sources = {
   formatting.prettier,
   formatting.fixjson,
   formatting.gofmt,
+  formatting.gofumpt,
   formatting.goimports,
   formatting.golines,
   formatting.isort,
@@ -60,6 +64,8 @@ local sources = {
   formatting.textlint,
   formatting.yamlfmt,
   formatting.zigfmt,
+  formatting.stylua,
+  formatting.taplo,
 
   hover.dictionary,
   hover.printenv,
