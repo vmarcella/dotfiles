@@ -13,7 +13,6 @@ local servers = {
   "vimls",
   "terraformls",
   "tflint",
-  "yamlls",
   "jsonls",
   "marksman",
   "helm_ls",
@@ -49,7 +48,7 @@ lspconfig.rust_analyzer.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "rust" },
-  root_dir = util.root_pattern("Cargo.toml"),
+  root_dir = util.root_pattern "Cargo.toml",
   settings = {
     ["rust-analyzer"] = {
       diagnostics = {
@@ -105,4 +104,21 @@ lspconfig.lua_ls.setup {
     end
     return true
   end,
+}
+
+lspconfig.yamlls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    yaml = {
+      schemas = {
+        -- Github Actions
+        ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+        --  Azure Container apps
+        ["https://json.schemastore.org/azure-containerapp-template.json"] = "/**/*.aca.yaml",
+        -- Azure pipelines
+        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = "/.pipelines/*",
+      },
+    },
+  },
 }
