@@ -29,14 +29,14 @@ local plugins = {
         "hadolint",
 
         -- rust
-        "rust-analyzer",
+        -- "rust-analyzer",
 
         -- Golang
         "gopls",
         "gotests",
         "golines",
         "gofumpt",
- 
+
         -- C#
         "omnisharp",
 
