@@ -4,11 +4,11 @@ M.crates = {
   n = {
     ["<leader>rcu"] = {
       function()
-        require('crates').upgrade_all_crates()
+        require("crates").upgrade_all_crates()
       end,
-      "Update all crates"
-    }
-  }
+      "Update all crates",
+    },
+  },
 }
 
 -- Debugging adapter protocol mappings
@@ -17,29 +17,29 @@ M.dap = {
   n = {
     ["<leader>dc"] = {
       function()
-        require('dap').continue()
+        require("dap").continue()
       end,
-      "Continue"
+      "Continue",
     },
     ["<leader>dr"] = {
       "<cmd> DapContinue <CR>",
-      "Repl"
+      "Repl",
     },
     ["<leader>db"] = {
       function()
-        require('dap').toggle_breakpoint()
+        require("dap").toggle_breakpoint()
       end,
-      "Toggle Breakpoint"
+      "Toggle Breakpoint",
     },
     ["<leader>dus"] = {
-      function ()
-        local widgets = require('dap.ui.widgets')
+      function()
+        local widgets = require "dap.ui.widgets"
         local sidebar = widgets.sidebar(widgets.scopes)
         sidebar.open()
       end,
-      "Open Debugging sidebar"
-    }
-  }
+      "Open Debugging sidebar",
+    },
+  },
 }
 
 M.dap_go = {
@@ -47,17 +47,17 @@ M.dap_go = {
   n = {
     ["<leader>dgt"] = {
       function()
-        require('dap-go').debug_test()
+        require("dap-go").debug_test()
       end,
-      "Debug go test"
+      "Debug go test",
     },
     ["<leader>dgl"] = {
       function()
-        require('dap-go').debug_last()
+        require("dap-go").debug_last()
       end,
-      "Debug last go test"
-    }
-  }
+      "Debug last go test",
+    },
+  },
 }
 
 M.dap_python = {
@@ -65,11 +65,47 @@ M.dap_python = {
   n = {
     ["<leader>dpr"] = {
       function()
-        require('dap-python').test_method()
+        require("dap-python").test_method()
       end,
-      "Debug python test method"
-    }
-  }
+      "Debug python test method",
+    },
+  },
+}
+
+M.telescope = {
+  plugin = true,
+  n = {
+    ["<leader>gr"] = {
+      function()
+        require("telescope.builtin").lsp_references()
+      end,
+      "List references using telescope.",
+    },
+    ["<leader>gd"] = {
+      function()
+        require("telescope.builtin").lsp_definitions()
+      end,
+      "Go to the definition using telescope.",
+    },
+    ["<leader>gi"] = {
+      function()
+        require("telescope.builtin").lsp_implementations()
+      end,
+      "Go to implementations using telescope.",
+    },
+    ["<leader>sd"] = {
+      function()
+        require("telescope.builtin").diagnostics()
+      end,
+      "Show diagnostics using telescope.",
+    },
+    ["<leader>sfd"] = {
+      function()
+        require("telescope.builtin").diagnostics { bufnr = 0 }
+      end,
+      "Show diagnostics for the current buffer using telescope.",
+    },
+  },
 }
 
 return M
