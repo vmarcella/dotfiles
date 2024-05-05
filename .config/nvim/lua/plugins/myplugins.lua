@@ -16,6 +16,7 @@ local plugins = {
         -- bash
         "shfmt",
         "shellharden",
+        "bash-language-server",
 
         -- bicep
         "bicep-lsp",
@@ -41,7 +42,7 @@ local plugins = {
         "omnisharp",
 
         -- C++
-        "cpplint",
+        "clangd",
 
         -- Python
         "autoflake",
@@ -52,6 +53,7 @@ local plugins = {
         "flake8",
         "isort",
         "ruff",
+        "ruff-lsp",
         "pyproject-flake8",
 
         -- typescript
@@ -72,8 +74,8 @@ local plugins = {
 
         -- lua
         "lua-language-server",
-        "luacheck",
         "stylua",
+        "selene",
 
         -- terraform
         "tflint",
@@ -85,6 +87,7 @@ local plugins = {
 
         -- json
         "fixjson",
+        "json-lsp",
 
         -- toml
         "taplo",
@@ -136,18 +139,18 @@ local plugins = {
     dependencies = {
       "nvimtools/none-ls.nvim",
       config = function()
-        require "custom.configs.null-ls"
+        require "configs.null-ls"
       end,
     },
     config = function()
-      require "plugins.configs.lspconfig"
-      require "custom.configs.lspconfig"
+      require "nvchad.configs.lspconfig"
+      require "configs.lspconfig"
     end,
   },
   {
     "hrsh7th/nvim-cmp",
     opts = function()
-      local M = require "plugins.configs.cmp"
+      local M = require "nvchad.configs.cmp"
       table.insert(M.sources, { name = "crates" })
       return M
     end,
@@ -165,7 +168,7 @@ local plugins = {
     dependencies = "neovim/nvim-lspconfig",
     ft = "rust",
     opts = function()
-      return require "custom.configs.rust-tools"
+      return require "configs.rust-tools"
     end,
     config = function(_, opts)
       require("rust-tools").setup(opts)
@@ -183,11 +186,12 @@ local plugins = {
   },
   -- Debuggers
   {
+    "nvim-neotest/nvim-nio",
+  },
+  {
     -- Debugger adapter protocol client.
     "mfussenegger/nvim-dap",
-    config = function()
-      require("core.utils").load_mappings "dap"
-    end,
+    dependencies = "nvim-neotest/nvim-nio",
   },
   {
     -- DAP UI

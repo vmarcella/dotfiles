@@ -1,15 +1,17 @@
-local on_attach = require("plugins.configs.lspconfig").on_attach
-local capabilities = require("plugins.configs.lspconfig").capablities
+local on_attach = require("nvchad.configs.lspconfig").on_attach
+local capabilities = require("nvchad.configs.lspconfig").capablities
 
 local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 
+-- LSP servers that don't need any custom configuration should be defined
+-- here.
 local servers = {
   "bashls",
   "bicep",
+  "clangd",
   "cmake",
   "cssls",
-  "eslint",
   "vimls",
   "terraformls",
   "tflint",
@@ -21,11 +23,25 @@ local servers = {
   "docker_compose_language_service",
   "csharp_ls",
   "zls",
+  "ruff",
+  "ruff_lsp",
+  "taplo",
 }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
 end
+
+-- Manual setup for eslint
+lspconfig.eslint.setup {
+  on_attach = function(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "EslintFixAll",
+    })
+  end,
+  capabilities = capabilities,
+}
 
 -- Manual setup for gopls
 lspconfig.gopls.setup {
@@ -71,6 +87,7 @@ lspconfig.tsserver.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   init_options = { preferences = { disableSuggestions = true } },
+  settings = { documentFormatting = false },
 }
 
 lspconfig.lua_ls.setup {
