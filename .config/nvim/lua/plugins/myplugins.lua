@@ -220,7 +220,7 @@ local plugins = {
     dependencies = { "mfussenegger/nvim-dap" },
     config = function(_, opts)
       require("dap-go").setup(opts)
-      require("core.utils").load_mappings "dap_go"
+      --require("core.utils").load_mappings "dap_go"
     end,
   },
   {
@@ -247,7 +247,7 @@ local plugins = {
       require("dap-python").test_runner = "pytest"
 
       require("dap-python").setup(path)
-      require("core.utils").load_mappings "dap_python"
+      --require("core.utils").load_mappings "dap_python"
     end,
   },
 }
