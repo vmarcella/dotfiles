@@ -11,33 +11,34 @@ local sources = {
   completion.tags,
 
   diagnostics.actionlint,
-  diagnostics.shellcheck,
+  --diagnostics.shellcheck, Replaced with bashls lsp.
   diagnostics.buf,
   diagnostics.checkmake,
   diagnostics.checkstyle,
-  diagnostics.clang_check,
+  --diagnostics.clang_check, Replaced with clangd lsp.
   diagnostics.cmake_lint,
   diagnostics.cppcheck,
-  diagnostics.cpplint,
-  diagnostics.eslint,
+  --diagnostics.cpplint, Replaced with clangd lsp.
+  --diagnostics.eslint, Replaced with eslint lsp.
   diagnostics.dotenv_linter,
-  diagnostics.flake8,
+  --diagnostics.flake8, Replaced with ruff-lsp lsp.
   diagnostics.mypy,
-  diagnostics.pyproject_flake8,
-  diagnostics.luacheck,
+  --diagnostics.pyproject_flake8, Replaced with ruff lsp.
+  --diagnostics.luacheck, Replaced with selene.
+  diagnostics.selene,
   diagnostics.markdownlint,
-  diagnostics.ruff,
+  --diagnostics.ruff, Replaced with ruff lsp
   diagnostics.pylint,
   diagnostics.staticcheck,
   diagnostics.tfsec,
-  diagnostics.tsc,
+  --diagnostics.tsc,
   diagnostics.yamllint,
   diagnostics.zsh,
   diagnostics.trivy,
   diagnostics.hadolint,
 
-  formatting.autoflake,
-  formatting.autopep8,
+  --formatting.autoflake, Replaced with ruff lsp
+  --formatting.autopep8, Replaced with ruff lsp
   formatting.black,
   formatting.buf,
   formatting.cbfmt,
@@ -45,26 +46,26 @@ local sources = {
   formatting.cmake_format,
   formatting.csharpier,
   formatting.prettier,
-  formatting.fixjson,
+  --formatting.fixjson, Replaced with jsonls
   formatting.gofmt,
   formatting.gofumpt,
   formatting.goimports,
   formatting.golines,
   formatting.isort,
   formatting.markdownlint,
-  formatting.ruff,
-  formatting.rustfmt,
+  --formatting.ruff, Replaced with ruff lsp
+  --formatting.rustfmt, Replaced with rust-analyzer lsp
   formatting.shellharden,
   formatting.shfmt,
   formatting.sqlfluff,
   formatting.sql_formatter,
-  formatting.terrafmt,
+  --formatting.terrafmt,
   formatting.terraform_fmt,
   formatting.textlint,
   formatting.yamlfmt,
-  formatting.zigfmt,
+  --formatting.zigfmt, Replaced with zls lsp
   formatting.stylua,
-  formatting.taplo,
+  --formatting.taplo,
 
   hover.dictionary,
   hover.printenv,
@@ -80,7 +81,8 @@ null_ls.setup {
         group = augroup,
         buffer = bufnr,
         callback = function()
-          vim.lsp.buf.format { async = true, bufnr = bufnr }
+          -- Setting async=true causes issues with buffers saving.
+          vim.lsp.buf.format { async = false, bufnr = bufnr }
         end,
       })
     end

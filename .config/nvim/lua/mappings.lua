@@ -1,3 +1,4 @@
+require "nvchad.mappings"
 local M = {}
 
 M.crates = {
@@ -13,7 +14,6 @@ M.crates = {
 
 -- Debugging adapter protocol mappings
 M.dap = {
-  plugin = true,
   n = {
     ["<leader>dc"] = {
       function()
@@ -43,7 +43,6 @@ M.dap = {
 }
 
 M.dap_go = {
-  plugin = true,
   n = {
     ["<leader>dgt"] = {
       function()
@@ -61,7 +60,6 @@ M.dap_go = {
 }
 
 M.dap_python = {
-  plugin = true,
   n = {
     ["<leader>dpr"] = {
       function()
@@ -73,7 +71,6 @@ M.dap_python = {
 }
 
 M.telescope = {
-  plugin = true,
   n = {
     ["<leader>gr"] = {
       function()
@@ -108,4 +105,15 @@ M.telescope = {
   },
 }
 
-return M
+local map = vim.keymap.set
+
+-- Iterate through all old mappings and register them with vim. This preserves 
+-- nvchad 2.0 syntax while utilizing nvchad 2.5 mappings.
+-- Found from https://github.com/NvChad/NvChad/issues/2688
+for plugin, modes in pairs(M) do 
+  for mode, maps in pairs(modes) do 
+    for key, val in pairs(maps) do
+      map(mode, key, val[1], { desc = val[2] } )
+    end
+  end
+end
