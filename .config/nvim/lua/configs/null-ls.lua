@@ -22,7 +22,14 @@ local sources = {
   --diagnostics.eslint, Replaced with eslint lsp.
   diagnostics.dotenv_linter,
   --diagnostics.flake8, Replaced with ruff-lsp lsp.
-  diagnostics.mypy,
+  -- Configure mypy to use the virtual environment if present.
+  -- https://stackoverflow.com/questions/76487150/how-to-avoid-cannot-find-implementation-or-library-stub-when-mypy-is-installed
+  diagnostics.mypy.with {
+    extra_args = function()
+      local virtual = os.getenv "VIRTUAL_ENV" or os.getenv "CONDA_PREFIX" or "/usr"
+      return { "--python-executable", virtual .. "/bin/python" }
+    end,
+  },
   --diagnostics.pyproject_flake8, Replaced with ruff lsp.
   --diagnostics.luacheck, Replaced with selene.
   diagnostics.selene,
