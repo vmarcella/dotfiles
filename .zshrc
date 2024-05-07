@@ -55,8 +55,10 @@ setopt SHARE_HISTORY
 
 # ----------------------------------- EXPORTS ----------------------------------
 
+export DOTNET_ROOT="$HOME/.dotnet"
+
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$DOTNET_ROOT:$PATH"
 export EDITOR=nvim
 
 # Node virtual env setup
@@ -87,4 +89,8 @@ alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stef
 
 if [[ "$(uname -a)" =~ "Darwin" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+else 
+  # TODO(vmarcella): Check if this works for other distributions in the future.
+  export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
+  eval "$($(brew --prefix)/bin/brew shellenv)"
 fi
