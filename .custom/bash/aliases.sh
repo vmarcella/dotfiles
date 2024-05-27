@@ -6,7 +6,7 @@ alias tdetach="tmux detach"
 
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa azlinux azdo_rsa`'
+alias start_keychain='eval `keychain --eval --agents ssh id_ed25519 id_rsa id_rsa_dokku azlinux azdo_rsa`'
 
 alias steam="flatpak run --filesystem=/yeet com.valvesoftware.Steam"
 
