@@ -55,7 +55,9 @@ setopt SHARE_HISTORY
 
 # ----------------------------------- EXPORTS ----------------------------------
 
-export DOTNET_ROOT="$HOME/.dotnet"
+# The dotnet root seems to be located here when installing from 
+# packages.microsoft.com
+export DOTNET_ROOT="/usr/share/dotnet"
 
 # Add the new .local/bin folder to the path for user specific data (weird)
 export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$DOTNET_ROOT:$PATH"
