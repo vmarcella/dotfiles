@@ -9,7 +9,7 @@
 	helper = /home/linuxbrew/.linuxbrew/bin/gh auth git-credential
 
 [user]
-	email = cenz@cenz.io
+  email = cenz@cenz.io
   name = vmarcella
 
 [includeIf "gitdir:~/dev/azure/"]
