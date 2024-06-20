@@ -81,6 +81,9 @@ vim() {
     stty "$STTYOPTS"
 }
 
+# fpath must be loaded before compinit, otherwise compinit will not load the
+# custom completions.
+fpath=($HOME/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 compdef _git config
 
