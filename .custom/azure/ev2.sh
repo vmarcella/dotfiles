@@ -23,7 +23,13 @@ install_ev2() {
   popd # $HOME/dev/azureJ
   popd # Azure-Express-Cli
 
-  ev2 tabcompletion --shell zsh >"$HOME/.zsh/completions/_ev2"
+  if [[ "$SHELL" == *"bash"* ]]; then
+    mkdir -p "$HOME/.bash/completions"
+    ev2 tabcompletion --shell bash >"$HOME/.bash/completions/_ev2"
+  elif [[ "$SHELL" == *"zsh"* ]]; then
+    mkdir -p "$HOME/.zsh/completions"
+    ev2 tabcompletion --shell zsh >"$HOME/.zsh/completions/_ev2"
+  fi
 
   echo "ev2 and it's completions have been installed."
 }
