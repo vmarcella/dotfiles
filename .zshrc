@@ -55,8 +55,12 @@ setopt SHARE_HISTORY
 
 # ----------------------------------- EXPORTS ----------------------------------
 
+# The dotnet root seems to be located here when installing from 
+# packages.microsoft.com
+export DOTNET_ROOT="/usr/share/dotnet"
+
 # Add the new .local/bin folder to the path for user specific data (weird)
-export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.custom/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin:$DOTNET_ROOT:$PATH"
 export EDITOR=nvim
 
 # Node virtual env setup
@@ -77,6 +81,9 @@ vim() {
     stty "$STTYOPTS"
 }
 
+# fpath must be loaded before compinit, otherwise compinit will not load the
+# custom completions.
+fpath=($HOME/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 compdef _git config
 
@@ -87,4 +94,8 @@ alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stef
 
 if [[ "$(uname -a)" =~ "Darwin" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+else 
+  # TODO(vmarcella): Check if this works for other distributions in the future.
+  export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
+  eval "$($(brew --prefix)/bin/brew shellenv)"
 fi

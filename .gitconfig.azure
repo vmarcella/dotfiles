@@ -1,0 +1,14 @@
+# Use GCM for auth and configure azure devops  when working on projects for 
+# azure
+[credential]
+  helper = /home/vmarcella/.dotnet/tools/git-credential-manager
+  azreposCredentialType = oauth
+[credential "https://dev.azure.com"]
+  useHttpPath = true
+[credential "azrepos:org/msazure"]
+  azureAuthority = https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47
+  username = vmarcella@microsoft.com
+
+[user]
+  email = vmarcella@microsoft.com
+  name = vmarcella

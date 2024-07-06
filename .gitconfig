@@ -1,0 +1,16 @@
+# Use GH for any github related auth
+[credential "https://github.com"]
+	helper = /home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = /home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+# tpm uses this URL to install plugins for whatever reason, so we add it 
+# here as well
+[credential "https://git::@github.com"]
+	helper = /home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+
+[user]
+  email = cenz@cenz.io
+  name = vmarcella
+
+[includeIf "gitdir:~/dev/azure/"]
+  path = .gitconfig.azure
