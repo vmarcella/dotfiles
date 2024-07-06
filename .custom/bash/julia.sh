@@ -2,7 +2,7 @@
 
 # !! Contents within this block are managed by juliaup !!
 
-PATH=('/Users/vmarcella/.juliaup/bin' "$PATH")
+path=('/Users/vmarcella/.juliaup/bin' $path)
 export PATH
 
 # <<< juliaup initialize <<<
