@@ -37,6 +37,7 @@ local plugins = {
         "gotests",
         "golines",
         "gofumpt",
+        "staticcheck",
 
         -- C#
         "omnisharp",
