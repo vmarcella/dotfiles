@@ -1,5 +1,6 @@
-local on_attach = require("nvchad.configs.lspconfig").on_attach
+local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
 local capabilities = require("nvchad.configs.lspconfig").capablities
+local on_init = require("nvchad.configs.lspconfig").on_init
 
 local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
@@ -28,8 +29,63 @@ local servers = {
   "taplo",
 }
 
+-- List of servers we want to enable/disable formatting for.
+local lsp_format_enabled = {
+  ["html"] = false,
+  ["tsserver"] = false,
+  ["eslint"] = false,
+  ["cssls"] = false,
+  ["ruff"] = true,
+  ["ruff_lsp"] = true,
+  ["rust_analyzer"] = true,
+  ["pyright"] = true,
+  ["gopls"] = true,
+  ["lua_ls"] = false,
+  ["yamlls"] = true,
+}
+
+-- Create autogroup for Lsp formatting
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+-- Function to format on save, based on the server
+local lsp_formatting = function(bufnr)
+  vim.lsp.buf.format {
+    bufnr = bufnr,
+    filter = function(client)
+      return lsp_format_enabled[client.name]
+    end,
+  }
+end
+
+-- Override the on_attach function to enable formatting on save, but only for
+-- servers that support it.
+local on_attach = function(client, bufnr)
+  nvchad_on_attach(client, bufnr)
+  if client.supports_method "textDocument/formatting" then
+    vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        lsp_formatting(bufnr)
+      end,
+    })
+  end
+end
+
+-- Add borders back to hover boxes.
+local handlers = {
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
+}
+
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
+  lspconfig[lsp].setup {
+    on_attach = on_attach,
+    on_init = on_init,
+    capabilities = capabilities,
+    handlers = handlers,
+  }
 end
 
 -- Manual setup for eslint
@@ -40,12 +96,15 @@ lspconfig.eslint.setup {
       command = "EslintFixAll",
     })
   end,
+  on_init = on_init,
   capabilities = capabilities,
+  handlers = handlers,
 }
 
 -- Manual setup for gopls
 lspconfig.gopls.setup {
   on_attach = on_attach,
+  on_init = on_init,
   capabilities = capabilities,
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -57,11 +116,13 @@ lspconfig.gopls.setup {
       analyses = { unusedparams = true, unreachable = true },
     },
   },
+  handlers = handlers,
 }
 
 -- Manual setup for rust_analyzer
 lspconfig.rust_analyzer.setup {
   on_attach = on_attach,
+  on_init = on_init,
   capabilities = capabilities,
   filetypes = { "rust" },
   root_dir = util.root_pattern "Cargo.toml",
@@ -73,27 +134,33 @@ lspconfig.rust_analyzer.setup {
       cargo = { allFeatures = true },
     },
   },
+  handlers = handlers,
 }
 
 -- Manual setup for pyright
 lspconfig.pyright.setup {
   on_attach = on_attach,
+  on_init = on_init,
   capabilities = capabilities,
   filetypes = { "python" },
   root_dir = util.root_pattern("pyproject.toml", "setup.py", "setup.cfg", "requirements.txt"),
+  handlers = handlers,
 }
 
 -- Manual setup for typescript
 lspconfig.tsserver.setup {
   on_attach = on_attach,
+  on_init = on_init,
   capabilities = capabilities,
   init_options = { preferences = { disableSuggestions = true } },
   settings = { documentFormatting = false },
+  handlers = handlers,
 }
 
 lspconfig.lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  handlers = handlers,
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
@@ -126,6 +193,7 @@ lspconfig.lua_ls.setup {
 
 lspconfig.yamlls.setup {
   on_attach = on_attach,
+  on_init = on_init,
   capabilities = capabilities,
   settings = {
     yaml = {
@@ -139,4 +207,5 @@ lspconfig.yamlls.setup {
       },
     },
   },
+  handlers = handlers,
 }

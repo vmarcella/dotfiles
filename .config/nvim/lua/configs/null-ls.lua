@@ -1,5 +1,5 @@
 local null_ls = require "null-ls"
-local augroup = vim.api.nvim_create_augroup("LSPFormatting", {})
+local augroup = vim.api.nvim_create_augroup("NoneLsFormatting", {})
 
 local completion = null_ls.builtins.completion
 local formatting = null_ls.builtins.formatting
