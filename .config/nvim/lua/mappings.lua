@@ -92,7 +92,7 @@ M.telescope = {
     },
     ["<leader>sd"] = {
       function()
-        require("telescope.builtin").diagnostics()
+        require("telescope.builtin").diagnostics { wrap_results = true, line_width = "full" }
       end,
       "Show diagnostics using telescope.",
     },
@@ -107,13 +107,13 @@ M.telescope = {
 
 local map = vim.keymap.set
 
--- Iterate through all old mappings and register them with vim. This preserves 
+-- Iterate through all old mappings and register them with vim. This preserves
 -- nvchad 2.0 syntax while utilizing nvchad 2.5 mappings.
 -- Found from https://github.com/NvChad/NvChad/issues/2688
-for plugin, modes in pairs(M) do 
-  for mode, maps in pairs(modes) do 
+for plugin, modes in pairs(M) do
+  for mode, maps in pairs(modes) do
     for key, val in pairs(maps) do
-      map(mode, key, val[1], { desc = val[2] } )
+      map(mode, key, val[1], { desc = val[2] })
     end
   end
 end
