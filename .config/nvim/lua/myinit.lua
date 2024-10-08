@@ -4,6 +4,9 @@ vim.g.copilot_assume_mapped = true
 vim.keymap.set("i", "<M-j>", "<Plug>(copilot-next)")
 vim.keymap.set("i", "<M-k>", "<Plug>(copilot-previous)")
 
+-- Set filetype for bicep
+vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
+
 vim.cmd [[
 " ------------------------------------ PLUGINS ---------------------------------
 
@@ -23,7 +26,7 @@ vim.cmd [[
 
 " nvim specific plugins:V
 
-" Plug 'neoclide/coc.nvim', {'branch':'release'}  
+" Plug 'neoclide/coc.nvim', {'branch':'release'}
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'nvim-lua/plenary.nvim'
 " Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
@@ -31,7 +34,7 @@ vim.cmd [[
 " --- DISABLED ---
 "
 " Fuzzy file finder.
-" Plug 'ctrlpvim/ctrlp.vim' 
+" Plug 'ctrlpvim/ctrlp.vim'
 
 " call plug#end() " Init all plugins
 
@@ -103,7 +106,7 @@ set visualbell                   " Don't beep
 set noerrorbells                 " Plz don't beep
 set hidden                       " Allow hidden buffers to exist.
 set backup                       " Setup backup.
-set backupdir=$HOME/.vim/backup/ " Where to save backup files. 
+set backupdir=$HOME/.vim/backup/ " Where to save backup files.
 set dir=$HOME/.vim/swap/         " Swap file home location.
 set autoread                     " poll for file updates automatically.
 " set clipboard=unnamedplus      " Yanking will copy to the system clipboard.

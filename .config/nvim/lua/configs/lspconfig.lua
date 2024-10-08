@@ -9,7 +9,6 @@ local util = require "lspconfig/util"
 -- here.
 local servers = {
   "bashls",
-  "bicep",
   "clangd",
   "cmake",
   "cssls",
@@ -87,6 +86,16 @@ for _, lsp in ipairs(servers) do
     handlers = handlers,
   }
 end
+
+local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
+
+lspconfig.bicep.setup {
+  cmd = { bicep_path },
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+  handlers = handlers,
+}
 
 -- Manual setup for eslint
 lspconfig.eslint.setup {

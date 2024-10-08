@@ -113,6 +113,7 @@ local plugins = {
       ensure_installed = {
         "vim",
         "lua",
+        "bicep",
         "html",
         "css",
         "javascript",
