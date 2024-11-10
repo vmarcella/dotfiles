@@ -24,7 +24,6 @@ local servers = {
   "csharp_ls",
   "zls",
   "ruff",
-  "ruff_lsp",
   "taplo",
 }
 
@@ -35,7 +34,6 @@ local lsp_format_enabled = {
   ["eslint"] = false,
   ["cssls"] = false,
   ["ruff"] = true,
-  ["ruff_lsp"] = true,
   ["rust_analyzer"] = true,
   ["pyright"] = true,
   ["gopls"] = true,
