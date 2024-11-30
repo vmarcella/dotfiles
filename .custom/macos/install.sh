@@ -5,7 +5,7 @@ install_brew() {
 }
 
 install_python() {
-  brew install python@3.11
+  brew install python@3.13 python@3.12 python-setuptools pipx
   pip3 install --user poetry neovim
 }
 
@@ -22,10 +22,15 @@ install_node() {
   nvm install 18.13.0
 }
 
+install_go() {
+  brew install go
+}
+
 install_languages() {
   install_python
   install_rust
   install_node
+  install_go
 }
 
 install_vscode() {
@@ -59,9 +64,13 @@ install_dev_tools() {
   install_vscode
   install_tmux
 
-  brew install keychain cmake ninja
+  # Install some dev tools
+  brew install keychain cmake ninja azure-cli
   brew install --cask iterm2
   brew install --cask docker
+
+  # Install aider using python3.12, as 3.13 is not yet supported.
+  pipx install aider --python python3.12
 }
 
 install() {
