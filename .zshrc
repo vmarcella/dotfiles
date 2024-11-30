@@ -81,13 +81,8 @@ vim() {
     stty "$STTYOPTS"
 }
 
-# fpath must be loaded before compinit, otherwise compinit will not load the
-# custom completions.
-fpath=($HOME/.zsh/completions $fpath)
-autoload -Uz compinit && compinit
-compdef _git config
 
-zstyle ':completion:*' menu select
+# source $(brew --prefix)/etc/bash_completion.d/
 
 export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 alias gvm="$GOPATH/bin/g"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
@@ -99,3 +94,15 @@ else
   export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
   eval "$($(brew --prefix)/bin/brew shellenv)"
 fi
+
+# fpath must be loaded before compinit, otherwise compinit will not load the
+# custom completions.
+fpath=(
+  $HOME/.zsh/completions 
+  $fpath
+)
+
+autoload -Uz compinit bashcompinit && compinit && bashcompinit
+compdef _git config
+
+zstyle ':completion:*' menu select
