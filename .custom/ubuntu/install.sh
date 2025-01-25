@@ -66,9 +66,7 @@ install_tmux() {
 }
 
 install_neovim() {
-	sudo add-apt-repository ppa:neovim-ppa/unstable
-	sudo apt update
-	sudo apt install neovim
+  brew install neovim
 
 	pip3 install --user neovim
 
