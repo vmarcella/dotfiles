@@ -1,8 +1,8 @@
 local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
 local capabilities = require("nvchad.configs.lspconfig").capablities
 local on_init = require("nvchad.configs.lspconfig").on_init
+require("nvchad.configs.lspconfig").defaults()
 
-local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 
 -- LSP servers that don't need any custom configuration should be defined
@@ -77,26 +77,29 @@ local handlers = {
 }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  vim.lsp.config(lsp, {
     on_attach = on_attach,
     on_init = on_init,
     capabilities = capabilities,
     handlers = handlers,
-  }
+  })
+  vim.lsp.enable(lsp)
 end
 
 local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
 
-lspconfig.bicep.setup {
+vim.lsp.config("bicep", {
   cmd = { bicep_path },
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
   handlers = handlers,
-}
+})
+
+vim.lsp.enable "bicep"
 
 -- Manual setup for eslint
-lspconfig.eslint.setup {
+vim.lsp.config("eslint", {
   on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
@@ -106,16 +109,17 @@ lspconfig.eslint.setup {
   on_init = on_init,
   capabilities = capabilities,
   handlers = handlers,
-}
+})
+vim.lsp.enable "eslint"
 
 -- Manual setup for gopls
-lspconfig.gopls.setup {
+vim.lsp.config("gopls", {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  root_markers = { "go.work", "go.mod", ".git" },
   settings = {
     gopls = {
       completeUnimported = true,
@@ -124,15 +128,16 @@ lspconfig.gopls.setup {
     },
   },
   handlers = handlers,
-}
+})
+vim.lsp.enable "gopls"
 
 -- Manual setup for rust_analyzer
-lspconfig.rust_analyzer.setup {
+vim.lsp.config("rust_analyzer", {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
   filetypes = { "rust" },
-  root_dir = util.root_pattern "Cargo.toml",
+  root_markers = { "Cargo.toml" },
   settings = {
     ["rust-analyzer"] = {
       diagnostics = {
@@ -142,29 +147,35 @@ lspconfig.rust_analyzer.setup {
     },
   },
   handlers = handlers,
-}
+})
+vim.lsp.enable "rust_analyzer"
 
 -- Manual setup for pyright
-lspconfig.pyright.setup {
+--
+local pyright_path = vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver"
+vim.lsp.config.pyright = {
+  cmd = { pyright_path, "--stdio" },
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
   filetypes = { "python" },
-  root_dir = util.root_pattern("pyproject.toml", "setup.py", "setup.cfg", "requirements.txt"),
+  root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
   handlers = handlers,
 }
+vim.lsp.enable "pyright"
 
 -- Manual setup for typescript
-lspconfig.tsserver.setup {
+vim.lsp.config("tsserver", {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
   init_options = { preferences = { disableSuggestions = true } },
   settings = { documentFormatting = false },
   handlers = handlers,
-}
+})
+vim.lsp.enable "tsserver"
 
-lspconfig.lua_ls.setup {
+vim.lsp.config("lua_ls", {
   on_attach = on_attach,
   capabilities = capabilities,
   handlers = handlers,
@@ -196,9 +207,10 @@ lspconfig.lua_ls.setup {
     end
     return true
   end,
-}
+})
+vim.lsp.enable "lua_ls"
 
-lspconfig.yamlls.setup {
+vim.lsp.config("yamlls", {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
@@ -215,4 +227,6 @@ lspconfig.yamlls.setup {
     },
   },
   handlers = handlers,
-}
+})
+
+vim.lsp.enable "yamlls"
