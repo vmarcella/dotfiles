@@ -144,6 +144,9 @@ vim.lsp.config("rust_analyzer", {
         enable = true,
       },
       cargo = { allFeatures = true },
+      rustfmt = {
+        overrideCommand = { "rustfmt", "+nightly-2025-09-26" },
+      },
     },
   },
   handlers = handlers,
@@ -222,7 +225,8 @@ vim.lsp.config("yamlls", {
         --  Azure Container apps
         ["https://json.schemastore.org/azure-containerapp-template.json"] = "/**/*.aca.yaml",
         -- Azure pipelines
-        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = "/.pipelines/*",
+        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] =
+        "/.pipelines/*",
       },
     },
   },
