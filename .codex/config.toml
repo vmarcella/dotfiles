@@ -1,0 +1,6 @@
+model = "gpt-5"
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+
+[projects."/Users/vmarcella/dev/lambda"]
+trust_level = "trusted"
