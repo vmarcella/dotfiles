@@ -157,25 +157,6 @@ local plugins = {
       return M
     end,
   },
-  -- Rust plugins
-  {
-    "rust-lang/rust.vim",
-    ft = "rust",
-    config = function()
-      vim.g.rustfmt_autosave = 1
-    end,
-  },
-  {
-    "simrat39/rust-tools.nvim",
-    dependencies = "neovim/nvim-lspconfig",
-    ft = "rust",
-    opts = function()
-      return require "configs.rust-tools"
-    end,
-    config = function(_, opts)
-      require("rust-tools").setup(opts)
-    end,
-  },
   {
     "saecki/crates.nvim",
     dependencies = "hrsh7th/nvim-cmp",

@@ -4,6 +4,10 @@ vim.g.copilot_assume_mapped = true
 vim.keymap.set("i", "<M-j>", "<Plug>(copilot-next)")
 vim.keymap.set("i", "<M-k>", "<Plug>(copilot-previous)")
 
+-- Ensure Ctrl+S saves in both normal and insert modes
+vim.keymap.set("n", "<C-s>", ":w<CR>", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>a", { noremap = true, silent = true })
+
 -- Set filetype for bicep
 vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 
@@ -145,9 +149,9 @@ inoremap <silent> jj <ESC>
 nnoremap <silent> ;; :q<CR>
 
 " Key mapping for saving via ctrl-s in all modes
-noremap <silent> <C-S> :update<CR>
-vnoremap <silent> <C-S> <C-C>:update<CR>
-inoremap <silent> <C-S> <C-O>:update<CR>
+" noremap <silent> <C-S> :update<CR>
+" vnoremap <silent> <C-S> <C-C>:update<CR>
+" inoremap <silent> <C-S> <C-O>:update<CR>
 
 " Telescope mappings
 nnoremap <C-P>j <cmd>Telescope find_files<cr>

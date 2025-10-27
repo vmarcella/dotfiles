@@ -1,12 +1,18 @@
-local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
-local capabilities = require("nvchad.configs.lspconfig").capablities
-local on_init = require("nvchad.configs.lspconfig").on_init
-require("nvchad.configs.lspconfig").defaults()
+-- local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
+-- local capabilities = require("nvchad.configs.lspconfig").capablities
+-- local on_init = require("nvchad.configs.lspconfig").on_init
+-- require("nvchad.configs.lspconfig").defaults()
 
-local util = require "lspconfig/util"
+-- local util = require "lspconfig/util"
 
 -- LSP servers that don't need any custom configuration should be defined
 -- here.
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+pcall(function()
+  capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+end)
+
 local servers = {
   "bashls",
   "clangd",
@@ -39,6 +45,7 @@ local lsp_format_enabled = {
   ["gopls"] = true,
   ["lua_ls"] = false,
   ["yamlls"] = true,
+  ["null-ls"] = true,
 }
 
 -- Create autogroup for Lsp formatting
@@ -57,7 +64,6 @@ end
 -- Override the on_attach function to enable formatting on save, but only for
 -- servers that support it.
 local on_attach = function(client, bufnr)
-  nvchad_on_attach(client, bufnr)
   if client.supports_method "textDocument/formatting" then
     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -76,10 +82,18 @@ local handlers = {
   ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
 }
 
+vim.diagnostic.config {
+  virtual_text = true,
+  signs = true,
+  float = { border = "rounded" },
+  severity_sort = true,
+}
+
+vim.o.winborder = "rounded"
+
 for _, lsp in ipairs(servers) do
   vim.lsp.config(lsp, {
     on_attach = on_attach,
-    on_init = on_init,
     capabilities = capabilities,
     handlers = handlers,
   })
@@ -91,7 +105,6 @@ local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
 vim.lsp.config("bicep", {
   cmd = { bicep_path },
   on_attach = on_attach,
-  on_init = on_init,
   capabilities = capabilities,
   handlers = handlers,
 })
@@ -106,7 +119,6 @@ vim.lsp.config("eslint", {
       command = "EslintFixAll",
     })
   end,
-  on_init = on_init,
   capabilities = capabilities,
   handlers = handlers,
 })
@@ -115,7 +127,6 @@ vim.lsp.enable "eslint"
 -- Manual setup for gopls
 vim.lsp.config("gopls", {
   on_attach = on_attach,
-  on_init = on_init,
   capabilities = capabilities,
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -134,10 +145,9 @@ vim.lsp.enable "gopls"
 -- Manual setup for rust_analyzer
 vim.lsp.config("rust_analyzer", {
   on_attach = on_attach,
-  on_init = on_init,
   capabilities = capabilities,
   filetypes = { "rust" },
-  root_markers = { "Cargo.toml" },
+  root_markers = { "Cargo.lock" },
   settings = {
     ["rust-analyzer"] = {
       diagnostics = {
@@ -145,7 +155,7 @@ vim.lsp.config("rust_analyzer", {
       },
       cargo = { allFeatures = true },
       rustfmt = {
-        overrideCommand = { "rustfmt", "+nightly-2025-09-26" },
+        overrideCommand = { "rustup", "run", "nightly-2025-09-26", "rustfmt" },
       },
     },
   },
@@ -159,7 +169,6 @@ local pyright_path = vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver"
 vim.lsp.config.pyright = {
   cmd = { pyright_path, "--stdio" },
   on_attach = on_attach,
-  on_init = on_init,
   capabilities = capabilities,
   filetypes = { "python" },
   root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
@@ -170,7 +179,6 @@ vim.lsp.enable "pyright"
 -- Manual setup for typescript
 vim.lsp.config("tsserver", {
   on_attach = on_attach,
-  on_init = on_init,
   capabilities = capabilities,
   init_options = { preferences = { disableSuggestions = true } },
   settings = { documentFormatting = false },
@@ -225,8 +233,7 @@ vim.lsp.config("yamlls", {
         --  Azure Container apps
         ["https://json.schemastore.org/azure-containerapp-template.json"] = "/**/*.aca.yaml",
         -- Azure pipelines
-        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] =
-        "/.pipelines/*",
+        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = "/.pipelines/*",
       },
     },
   },
