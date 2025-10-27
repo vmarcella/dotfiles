@@ -1,7 +1,8 @@
--- local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
--- local capabilities = require("nvchad.configs.lspconfig").capablities
--- local on_init = require("nvchad.configs.lspconfig").on_init
--- require("nvchad.configs.lspconfig").defaults()
+local nvchad_on_attach = require("nvchad.configs.lspconfig").on_attach
+local capabilities = require("nvchad.configs.lspconfig").capablities
+local on_init = require("nvchad.configs.lspconfig").on_init
+
+local lspconfig = require "nvchad.configs.lspconfig"
 
 -- local util = require "lspconfig/util"
 
@@ -64,6 +65,12 @@ end
 -- Override the on_attach function to enable formatting on save, but only for
 -- servers that support it.
 local on_attach = function(client, bufnr)
+  -- Enabled inlay hints if supported.
+  if vim.lsp.inlay_hint then
+    vim.lsp.inlay_hint.enable(true, { 0 })
+  end
+
+  nvchad_on_attach(client, bufnr)
   if client.supports_method "textDocument/formatting" then
     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -93,6 +100,7 @@ vim.o.winborder = "rounded"
 
 for _, lsp in ipairs(servers) do
   vim.lsp.config(lsp, {
+    on_init = on_init,
     on_attach = on_attach,
     capabilities = capabilities,
     handlers = handlers,
@@ -104,6 +112,7 @@ local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
 
 vim.lsp.config("bicep", {
   cmd = { bicep_path },
+  on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
   handlers = handlers,
@@ -113,6 +122,7 @@ vim.lsp.enable "bicep"
 
 -- Manual setup for eslint
 vim.lsp.config("eslint", {
+  on_init = on_init,
   on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
@@ -126,6 +136,7 @@ vim.lsp.enable "eslint"
 
 -- Manual setup for gopls
 vim.lsp.config("gopls", {
+  on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
   cmd = { "gopls" },
@@ -144,6 +155,7 @@ vim.lsp.enable "gopls"
 
 -- Manual setup for rust_analyzer
 vim.lsp.config("rust_analyzer", {
+  on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "rust" },
@@ -152,6 +164,9 @@ vim.lsp.config("rust_analyzer", {
     ["rust-analyzer"] = {
       diagnostics = {
         enable = true,
+      },
+      checkOnSave = {
+        command = "clippy",
       },
       cargo = { allFeatures = true },
       rustfmt = {
@@ -167,6 +182,7 @@ vim.lsp.enable "rust_analyzer"
 --
 local pyright_path = vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver"
 vim.lsp.config.pyright = {
+  on_init = on_init,
   cmd = { pyright_path, "--stdio" },
   on_attach = on_attach,
   capabilities = capabilities,
