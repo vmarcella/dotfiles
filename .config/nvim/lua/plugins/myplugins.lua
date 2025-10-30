@@ -7,7 +7,7 @@ local plugins = {
   -- Dependencies, syntax highlighting, and LSPs
   {
     -- Installs lsp, diagnostic, and other dev tools needed by other plugins.
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         -- Github actions
