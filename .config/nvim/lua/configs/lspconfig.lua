@@ -9,12 +9,10 @@ local lspconfig = require "nvchad.configs.lspconfig"
 -- LSP servers that don't need any custom configuration should be defined
 -- here.
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
 pcall(function()
   capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 end)
 
-local custom_
 
 local servers = {
   "bashls",
@@ -120,6 +118,26 @@ local custom_servers = {
     root_markers = { "bicepconfig.json", ".git" },
     handlers = handlers,
   },
+  pyright = {
+      on_init = on_init,
+      cmd = { vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver", "--stdio" },
+      on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = { "python" },
+      root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
+      handlers = handlers,
+  },
+  eslint = {
+    on_init = on_init,
+    on_attach = function(client, bufnr)
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = bufnr,
+        command = "EslintFixAll",
+      })
+    end,
+    capabilities = capabilities,
+    handlers = handlers,
+  },
   rust_analyzer = {
     on_init = on_init,
     on_attach = on_attach,
@@ -148,19 +166,6 @@ for lsp, config in pairs(custom_servers) do
   vim.lsp.enable(lsp)
 end
 
--- Manual setup for eslint
-vim.lsp.config("eslint", {
-  on_init = on_init,
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
-  capabilities = capabilities,
-  handlers = handlers,
-})
-vim.lsp.enable "eslint"
 
 -- Manual setup for gopls
 vim.lsp.config("gopls", {
@@ -183,17 +188,6 @@ vim.lsp.enable "gopls"
 
 -- Manual setup for pyright
 --
-local pyright_path = vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver"
-vim.lsp.config.pyright = {
-  on_init = on_init,
-  cmd = { pyright_path, "--stdio" },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "python" },
-  root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
-  handlers = handlers,
-}
-vim.lsp.enable "pyright"
 
 -- Manual setup for typescript
 vim.lsp.config("tsserver", {
