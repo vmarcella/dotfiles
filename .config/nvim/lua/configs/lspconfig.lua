@@ -13,27 +13,6 @@ pcall(function()
   capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 end)
 
-
-local servers = {
-  "bashls",
-  "clangd",
-  "cmake",
-  "cssls",
-  "vimls",
-  "terraformls",
-  "tflint",
-  "jsonls",
-  "marksman",
-  "helm_ls",
-  "graphql",
-  "dockerls",
-  "docker_compose_language_service",
-  "csharp_ls",
-  "zls",
-  "ruff",
-  "taplo",
-}
-
 -- List of servers we want to enable/disable formatting for.
 local lsp_format_enabled = {
   ["html"] = false,
@@ -44,7 +23,7 @@ local lsp_format_enabled = {
   ["rust_analyzer"] = true,
   ["pyright"] = true,
   ["gopls"] = true,
-  ["lua_ls"] = false,
+  ["lua_ls"] = true,
   ["yamlls"] = true,
   ["null-ls"] = true,
 }
@@ -98,6 +77,26 @@ vim.diagnostic.config {
 
 vim.o.winborder = "rounded"
 
+local servers = {
+  "bashls",
+  "clangd",
+  "cmake",
+  "cssls",
+  "vimls",
+  "terraformls",
+  "tflint",
+  "jsonls",
+  "marksman",
+  "helm_ls",
+  "graphql",
+  "dockerls",
+  "docker_compose_language_service",
+  "csharp_ls",
+  "zls",
+  "ruff",
+  "taplo",
+}
+
 for _, lsp in ipairs(servers) do
   vim.lsp.config(lsp, {
     on_init = on_init,
@@ -119,13 +118,13 @@ local custom_servers = {
     handlers = handlers,
   },
   pyright = {
-      on_init = on_init,
-      cmd = { vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver", "--stdio" },
-      on_attach = on_attach,
-      capabilities = capabilities,
-      filetypes = { "python" },
-      root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
-      handlers = handlers,
+    on_init = on_init,
+    cmd = { vim.fn.stdpath "data" .. "/mason/bin/pyright-langserver", "--stdio" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "python" },
+    root_markers = { { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt" }, ".git" },
+    handlers = handlers,
   },
   eslint = {
     on_init = on_init,
@@ -137,6 +136,39 @@ local custom_servers = {
     end,
     capabilities = capabilities,
     handlers = handlers,
+  },
+  lua_ls = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    handlers = handlers,
+    on_init = function(client)
+      local path = client.workspace_folders[1].name
+      if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+        client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
+          Lua = {
+            runtime = {
+              -- Tell the language server which version of Lua you're using
+              -- (most likely LuaJIT in the case of Neovim)
+              version = "LuaJIT",
+            },
+            -- Make the server aware of Neovim runtime files
+            workspace = {
+              checkThirdParty = false,
+              library = {
+                vim.env.VIMRUNTIME,
+                -- "${3rd}/luv/library"
+                -- "${3rd}/busted/library",
+              },
+              -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+              -- library = vim.api.nvim_get_runtime_file("", true)
+            },
+          },
+        })
+
+        client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+      end
+      return true
+    end,
   },
   rust_analyzer = {
     on_init = on_init,
@@ -158,6 +190,48 @@ local custom_servers = {
     },
     handlers = handlers,
   },
+  gopls = {
+    on_init = on_init,
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = { "gopls" },
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    root_markers = { "go.work", "go.mod", ".git" },
+    settings = {
+      gopls = {
+        completeUnimported = true,
+        usePlaceholders = true,
+        analyses = { unusedparams = true, unreachable = true },
+      },
+    },
+    handlers = handlers,
+  },
+  yamlls = {
+    on_attach = on_attach,
+    on_init = on_init,
+    capabilities = capabilities,
+    settings = {
+      yaml = {
+        schemas = {
+          -- Github Actions
+          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+          --  Azure Container apps
+          ["https://json.schemastore.org/azure-containerapp-template.json"] = "/**/*.aca.yaml",
+          -- Azure pipelines
+          ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] =
+          "/.pipelines/*",
+        },
+      },
+    },
+    handlers = handlers,
+  },
+  tsserver = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    init_options = { preferences = { disableSuggestions = true } },
+    settings = { documentFormatting = false },
+    handlers = handlers,
+  },
 }
 
 -- Setup custom servers.
@@ -165,92 +239,3 @@ for lsp, config in pairs(custom_servers) do
   vim.lsp.config(lsp, config)
   vim.lsp.enable(lsp)
 end
-
-
--- Manual setup for gopls
-vim.lsp.config("gopls", {
-  on_init = on_init,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  cmd = { "gopls" },
-  filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_markers = { "go.work", "go.mod", ".git" },
-  settings = {
-    gopls = {
-      completeUnimported = true,
-      usePlaceholders = true,
-      analyses = { unusedparams = true, unreachable = true },
-    },
-  },
-  handlers = handlers,
-})
-vim.lsp.enable "gopls"
-
--- Manual setup for pyright
---
-
--- Manual setup for typescript
-vim.lsp.config("tsserver", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = { preferences = { disableSuggestions = true } },
-  settings = { documentFormatting = false },
-  handlers = handlers,
-})
-vim.lsp.enable "tsserver"
-
-vim.lsp.config("lua_ls", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  handlers = handlers,
-  on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
-      client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-        Lua = {
-          runtime = {
-            -- Tell the language server which version of Lua you're using
-            -- (most likely LuaJIT in the case of Neovim)
-            version = "LuaJIT",
-          },
-          -- Make the server aware of Neovim runtime files
-          workspace = {
-            checkThirdParty = false,
-            library = {
-              vim.env.VIMRUNTIME,
-              -- "${3rd}/luv/library"
-              -- "${3rd}/busted/library",
-            },
-            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-            -- library = vim.api.nvim_get_runtime_file("", true)
-          },
-        },
-      })
-
-      client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-    end
-    return true
-  end,
-})
-vim.lsp.enable "lua_ls"
-
-vim.lsp.config("yamlls", {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-  settings = {
-    yaml = {
-      schemas = {
-        -- Github Actions
-        ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-        --  Azure Container apps
-        ["https://json.schemastore.org/azure-containerapp-template.json"] = "/**/*.aca.yaml",
-        -- Azure pipelines
-        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = "/.pipelines/*",
-      },
-    },
-  },
-  handlers = handlers,
-})
-
-vim.lsp.enable "yamlls"
