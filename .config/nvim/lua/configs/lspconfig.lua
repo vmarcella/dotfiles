@@ -14,6 +14,8 @@ pcall(function()
   capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 end)
 
+local custom_
+
 local servers = {
   "bashls",
   "clangd",
@@ -108,6 +110,35 @@ for _, lsp in ipairs(servers) do
   vim.lsp.enable(lsp)
 end
 
+local custom_servers = {
+  rust_analyzer = {
+    on_init = on_init,
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "rust" },
+    root_markers = { "Cargo.lock" },
+    settings = {
+      ["rust-analyzer"] = {
+        diagnostics = {
+          enable = true,
+        },
+        checkOnSave = true,
+        cargo = { allFeatures = true },
+        rustfmt = {
+          overrideCommand = { "rustup", "run", "nightly-2025-09-26", "rustfmt" },
+        },
+      },
+    },
+    handlers = handlers,
+  },
+}
+
+-- Setup custom servers.
+for lsp, config in pairs(custom_servers) do
+  vim.lsp.config(lsp, config)
+  vim.lsp.enable(lsp)
+end
+
 local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
 
 vim.lsp.config("bicep", {
@@ -152,31 +183,6 @@ vim.lsp.config("gopls", {
   handlers = handlers,
 })
 vim.lsp.enable "gopls"
-
--- Manual setup for rust_analyzer
-vim.lsp.config("rust_analyzer", {
-  on_init = on_init,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "rust" },
-  root_markers = { "Cargo.lock" },
-  settings = {
-    ["rust-analyzer"] = {
-      diagnostics = {
-        enable = true,
-      },
-      checkOnSave = {
-        command = "clippy",
-      },
-      cargo = { allFeatures = true },
-      rustfmt = {
-        overrideCommand = { "rustup", "run", "nightly-2025-09-26", "rustfmt" },
-      },
-    },
-  },
-  handlers = handlers,
-})
-vim.lsp.enable "rust_analyzer"
 
 -- Manual setup for pyright
 --
