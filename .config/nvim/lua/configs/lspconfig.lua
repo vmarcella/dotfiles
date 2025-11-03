@@ -111,6 +111,15 @@ for _, lsp in ipairs(servers) do
 end
 
 local custom_servers = {
+  bicep = {
+    cmd = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp",
+    on_init = on_init,
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "bicep" },
+    root_markers = { "bicepconfig.json", ".git" },
+    handlers = handlers,
+  },
   rust_analyzer = {
     on_init = on_init,
     on_attach = on_attach,
@@ -138,18 +147,6 @@ for lsp, config in pairs(custom_servers) do
   vim.lsp.config(lsp, config)
   vim.lsp.enable(lsp)
 end
-
-local bicep_path = vim.fn.stdpath "data" .. "/mason/bin/bicep-lsp"
-
-vim.lsp.config("bicep", {
-  cmd = { bicep_path },
-  on_init = on_init,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  handlers = handlers,
-})
-
-vim.lsp.enable "bicep"
 
 -- Manual setup for eslint
 vim.lsp.config("eslint", {
