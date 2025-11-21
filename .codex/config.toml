@@ -1,6 +1,9 @@
-model = "gpt-5"
+model = "gpt-5.1-codex-max"
 model_reasoning_effort = "high"
 approval_policy = "on-request"
 
 [projects."/Users/vmarcella/dev/lambda"]
 trust_level = "trusted"
+
+[notice]
+"hide_gpt-5.1-codex-max_migration_prompt" = true
