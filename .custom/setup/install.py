@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import platform as py_platform
+import shlex
 import shutil
 import subprocess
 import sys
@@ -371,6 +372,31 @@ def install_pipx_packages(ctx: Context, items: list[Any]) -> None:
         raise TypeError(f"Unsupported pipx entry: {item!r}")
 
 
+def install_npm_packages(ctx: Context, packages: list[str]) -> None:
+    """Install global npm packages.
+
+    On systems using nvm, `npm` may not be on PATH for non-interactive processes.
+    We therefore run through a login shell and source `nvm.sh` when present.
+    """
+    if not packages:
+        return
+
+    pkgs = " ".join(shlex.quote(p) for p in packages)
+    script = f"""
+        set -e
+        if ! command -v npm >/dev/null 2>&1; then
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+        fi
+        if ! command -v npm >/dev/null 2>&1; then
+          echo "npm not found. Install Node.js first (e.g. include the languages-node module)." >&2
+          exit 1
+        fi
+        npm i -g {pkgs}
+    """
+    run_bash(script, dry_run=ctx.dry_run)
+
+
 # --------------------------- Profile/Module Resolve --------------------------
 
 
@@ -486,6 +512,7 @@ def main(argv: list[str]) -> int:
     casks: list[str] = []
     pip_pkgs: list[str] = []
     pipx_items: list[Any] = []
+    npm_pkgs: list[str] = []
     actions: list[str] = []
 
     for module_name in module_names:
@@ -528,6 +555,13 @@ def main(argv: list[str]) -> int:
         pipx_map = module.get("pipx")
         pipx_items.extend(collect_selector_map(pipx_map, platform_key=ctx.platform_key))
 
+        npm_map = module.get("npm")
+        npm_items = collect_selector_map(npm_map, platform_key=ctx.platform_key)
+        if npm_items:
+            if not all(isinstance(x, str) for x in npm_items):
+                raise TypeError(f"module {module_name}: npm entries must be strings")
+            npm_pkgs.extend(npm_items)
+
         action_map = module.get("actions")
         action_items = collect_selector_map(action_map, platform_key=ctx.platform_key)
         for a in action_items:
@@ -538,6 +572,7 @@ def main(argv: list[str]) -> int:
     packages = resolve_package_entries(ctx, pkg_entries)
     casks = uniq_keep_order(casks)
     pip_pkgs = uniq_keep_order(pip_pkgs)
+    npm_pkgs = uniq_keep_order(npm_pkgs)
     actions = uniq_keep_order(actions)
 
     install_system_packages(ctx, packages, casks=casks)
@@ -549,6 +584,8 @@ def main(argv: list[str]) -> int:
         if fn is None:
             raise RuntimeError(f"Unknown action: {action}")
         fn(ctx, config)
+
+    install_npm_packages(ctx, npm_pkgs)
 
     return 0
 

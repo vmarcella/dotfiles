@@ -36,5 +36,7 @@ Profiles are defined under `profiles` in `setup/dependencies.yaml`.
 - Add macOS apps in `modules.<name>.casks.brew`.
 - Add Python user packages in `modules.<name>.pip`
   (selectors: `all`, `linux`, `macos`, `ubuntu`, `manjaro`).
+- Add global npm packages in `modules.<name>.npm`
+  (selectors: `all`, `linux`, `macos`, `ubuntu`, `manjaro`).
 - Add scripted steps in `modules.<name>.actions`
-  (implemented in `setup/install.py`).
+  (implemented in `setup/install_actions.py`).

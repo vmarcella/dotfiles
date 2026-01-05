@@ -14,7 +14,7 @@ version: 1
 # - Special entry: `{ any_of: ["pkg-a", "pkg-b"] }` chooses the first available.
 #
 # Selectors:
-# - Keys under `modules.*.(actions|pip|pipx)` are selectors: `all`, `linux`,
+# - Keys under `modules.*.(actions|pip|pipx|npm)` are selectors: `all`, `linux`,
 #   `macos`, `ubuntu`, `manjaro`.
 
 # ------------------------------- Profiles -----------------------------------
@@ -30,6 +30,7 @@ profiles:
       - languages-python
       - languages-rust
       - languages-node
+      - codex
       - languages-go
       - languages-java
       - clangd
@@ -176,6 +177,17 @@ modules:
     packages:
       brew:
         - azure-cli
+
+  # OpenAI Codex CLI:
+  # - macOS: installed via Homebrew cask (`brew install --cask codex`)
+  # - Ubuntu: installed via npm (`npm i -g @openai/codex`)
+  codex:
+    casks:
+      brew:
+        - codex
+    npm:
+      ubuntu:
+        - "@openai/codex"
 
   # Language toolchains.
   languages-python:
