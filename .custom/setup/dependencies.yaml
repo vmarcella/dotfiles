@@ -129,9 +129,6 @@ modules:
       brew:
         - visual-studio-code
         - iterm2
-    pip:
-      all:
-        - neovim
     actions:
       all:
         - vim_dirs
@@ -198,15 +195,13 @@ modules:
         - python-pip
         - python-pipx
     pip:
-      macos:
-        - poetry
       linux:
         - virtualenv
         - virtualenvwrapper
     pipx:
-      macos:
-        - name: aider
-          python: python3.12
+      all:
+        - name: poetry
+          python: python3.13
 
   languages-rust:
     packages:

@@ -1,60 +1,60 @@
 #!/usr/bin/env python3
 
+"""
+Data-driven setup installer.
+
+This script reads `setup/dependencies.yaml` and installs the requested modules
+via the host OS package manager (brew/apt/pacman), plus optional `pip`/`pipx`
+packages and a small set of scripted actions (e.g. nvm/rustup bootstrap).
+
+Supported platforms:
+  - macOS  -> Homebrew (`brew`)
+  - Ubuntu -> APT (`apt-get`)
+  - Manjaro/Arch -> pacman
+"""
+
 from __future__ import annotations
 
 import argparse
-import os
 import platform as py_platform
 import shutil
 import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from install_actions import ACTIONS
+from install_core import Context, platform_kind, run, shlex_join
 
-def eprint(*args: object) -> None:
+
+# ------------------------------ Output Helpers ------------------------------
+
+
+def error_print(*args: object) -> None:
     print(*args, file=sys.stderr)
 
 
-def shlex_join(parts: list[str]) -> str:
-    # Avoid importing shlex on older python? It's stdlib, but keep formatting simple.
-    import shlex
+# ------------------------------ YAML Dependency ------------------------------
 
-    return " ".join(shlex.quote(p) for p in parts)
-
-
-def run(
-    cmd: list[str],
-    *,
-    check: bool = True,
-    dry_run: bool = False,
-    env: dict[str, str] | None = None,
-) -> subprocess.CompletedProcess[str] | None:
-    if dry_run:
-        print("+", shlex_join(cmd))
-        return None
-    return subprocess.run(cmd, check=check, text=True, env=env)
+try:
+    import yaml  # type: ignore
+except Exception:
+    error_print("Missing dependency: PyYAML.")
+    error_print("Install it with: python3 -m pip install --user pyyaml")
+    raise
 
 
-def run_bash(
-    script: str,
-    *,
-    check: bool = True,
-    dry_run: bool = False,
-    env: dict[str, str] | None = None,
-) -> subprocess.CompletedProcess[str] | None:
-    return run(["bash", "-lc", script], check=check, dry_run=dry_run, env=env)
-
+# ---------------------------- Command Execution -----------------------------
 
 def load_yaml(path: Path) -> dict[str, Any]:
-    try:
-        import yaml  # type: ignore
-    except Exception:
-        eprint("Missing dependency: PyYAML.")
-        eprint("Install it with: python3 -m pip install --user pyyaml")
-        raise
+    """Load a YAML file and return its contents as a dictionary.
 
+    Args:
+        path: Path to the YAML file.
+
+    Returns:
+        A dictionary representing the YAML file contents.
+    """
     with path.open("r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
     if not isinstance(data, dict):
@@ -62,7 +62,15 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return data
 
 
+# ---------------------------- Platform Detection ----------------------------
+
+
 def read_os_release() -> dict[str, str]:
+    """Read /etc/os-release and return its contents as a dictionary.
+
+    Returns:
+        A dictionary of key-value pairs from /etc/os-release.
+    """
     os_release = Path("/etc/os-release")
     if not os_release.exists():
         return {}
@@ -77,7 +85,13 @@ def read_os_release() -> dict[str, str]:
 
 
 def detect_platform() -> str:
+    """Detect the current platform and return a platform key.
+
+    Returns:
+        A string platform key, one of "macos", "ubuntu", or "manjaro".
+    """
     sysname = py_platform.system().lower()
+
     if sysname == "darwin":
         return "macos"
     if sysname != "linux":
@@ -86,30 +100,48 @@ def detect_platform() -> str:
     osr = read_os_release()
     distro_id = (osr.get("ID") or "").lower()
     distro_like = (osr.get("ID_LIKE") or "").lower()
+
     if distro_id == "ubuntu" or "ubuntu" in distro_like or "debian" in distro_like:
         return "ubuntu"
     if distro_id in {"manjaro", "arch"} or "arch" in distro_like:
         return "manjaro"
-    raise RuntimeError(f"Unsupported Linux distro: ID={distro_id!r} ID_LIKE={distro_like!r}")
 
-
-def platform_kind(platform_key: str) -> str:
-    if platform_key in {"ubuntu", "manjaro"}:
-        return "linux"
-    return platform_key
+    raise RuntimeError(
+        f"Unsupported Linux distro: ID={distro_id!r} ID_LIKE={distro_like!r}"
+    )
 
 
 def manager_for_platform(platform_key: str) -> str:
+    """Return the package manager for a given platform key.
+
+    Args:
+        platform_key: The specific platform key (e.g. "macos", "ubuntu", "manjaro")
+
+    Returns:
+        The package manager key ("brew", "apt", "pacman").
+    """
     if platform_key == "macos":
         return "brew"
     if platform_key == "ubuntu":
         return "apt"
     if platform_key == "manjaro":
         return "pacman"
+
     raise RuntimeError(f"Unknown platform: {platform_key}")
 
 
+# -------------------------- Selectors / List Helpers -------------------------
+
+
 def uniq_keep_order(items: Iterable[str]) -> list[str]:
+    """Return a list of unique items, preserving their original order.
+
+    Args:
+        items: An iterable of strings.
+
+    Returns:
+        A list of unique strings in their original order.
+    """
     seen: set[str] = set()
     out: list[str] = []
     for item in items:
@@ -121,6 +153,15 @@ def uniq_keep_order(items: Iterable[str]) -> list[str]:
 
 
 def selector_keys(platform_key: str) -> list[str]:
+    """Return the selector keys for a given platform key.
+
+    Args:
+        platform_key: The specific platform key (e.g., "ubuntu", "manjaro")
+
+    Returns:
+        A list of selector keys in order of precedence.
+
+    """
     keys = ["all"]
     kind = platform_kind(platform_key)
     if kind == "linux":
@@ -130,12 +171,24 @@ def selector_keys(platform_key: str) -> list[str]:
 
 
 def collect_selector_map(map_value: Any, *, platform_key: str) -> list[Any]:
+    """Collect items from a selector map based on platform key.
+
+    Args:
+        map_value: The selector map (dict) or list of items.
+        platform_key: The specific platform key (e.g., "ubuntu", "manjaro")
+
+    Returns:
+        A list of collected items.
+    """
     if map_value is None:
         return []
+
     if isinstance(map_value, list):
         return map_value
+
     if not isinstance(map_value, dict):
         raise TypeError(f"Expected list or mapping, got {type(map_value)}")
+
     out: list[Any] = []
     for k in selector_keys(platform_key):
         v = map_value.get(k)
@@ -147,23 +200,19 @@ def collect_selector_map(map_value: Any, *, platform_key: str) -> list[Any]:
     return out
 
 
-@dataclass(frozen=True)
-class Context:
-    platform_key: str
-    manager: str
-    repo_root: Path
-    dry_run: bool
-    yes: bool
-    do_update: bool
-
-
-def ensure_home_exists() -> Path:
-    home = Path.home()
-    home.mkdir(parents=True, exist_ok=True)
-    return home
+# ------------------------------ Install Context ------------------------------
 
 
 def pkg_exists(ctx: Context, pkg_name: str) -> bool:
+    """Check if a package exists in the package manager's repository.
+
+    Args:
+        ctx: The installation context.
+        pkg_name: The name of the package to check.
+
+    Returns:
+        True if the package exists, False otherwise.
+    """
     if ctx.manager == "apt":
         # `apt-cache show` returns non-zero for unknown packages.
         result = subprocess.run(
@@ -171,18 +220,39 @@ def pkg_exists(ctx: Context, pkg_name: str) -> bool:
             check=False,
         )
         return result.returncode == 0
+
     if ctx.manager == "pacman":
-        result = subprocess.run(["pacman", "-Si", pkg_name], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        result = subprocess.run(
+            ["pacman", "-Si", pkg_name],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
         return result.returncode == 0
+
     if ctx.manager == "brew":
         if shutil.which("brew") is None:
             return False
-        result = subprocess.run(["brew", "info", pkg_name], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        result = subprocess.run(
+            ["brew", "info", pkg_name],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
         return result.returncode == 0
     return False
 
 
 def resolve_package_entries(ctx: Context, entries: list[Any]) -> list[str]:
+    """Resolve package entries into concrete package names.
+
+    Supported entry forms:
+      - "pkg-name"
+      - {"any_of": ["candidate-a", "candidate-b", ...]}
+
+    The `any_of` form is useful for distro-specific renames (e.g. `clangd` vs
+    `clangd-10`); the first known package is chosen.
+    """
     resolved: list[str] = []
     for entry in entries:
         if isinstance(entry, str):
@@ -190,8 +260,11 @@ def resolve_package_entries(ctx: Context, entries: list[Any]) -> list[str]:
             continue
         if isinstance(entry, dict) and "any_of" in entry:
             options = entry["any_of"]
-            if not isinstance(options, list) or not all(isinstance(x, str) for x in options):
+            if not isinstance(options, list) or not all(
+                isinstance(x, str) for x in options
+            ):
                 raise TypeError("'any_of' must be a list of strings")
+
             chosen = None
             for opt in options:
                 if ctx.dry_run:
@@ -200,16 +273,30 @@ def resolve_package_entries(ctx: Context, entries: list[Any]) -> list[str]:
                 if pkg_exists(ctx, opt):
                     chosen = opt
                     break
+
             if chosen is None:
-                # Fall back to the first option to produce a useful failure message at install time.
+                # Fall back to the first option to produce a useful failure
+                # message at install time.
                 chosen = options[0]
             resolved.append(chosen)
             continue
+
         raise TypeError(f"Unsupported package entry: {entry!r}")
     return uniq_keep_order(resolved)
 
 
-def install_system_packages(ctx: Context, packages: list[str], *, casks: list[str]) -> None:
+# ---------------------------- System/Python Installs -------------------------
+
+
+def install_system_packages(
+    ctx: Context, packages: list[str], *, casks: list[str]
+) -> None:
+    """Install system packages via the platform package manager.
+
+    - `brew`: installs formulae and optional `--cask` apps.
+    - `apt`: optionally runs `apt-get update`, then installs packages.
+    - `pacman`: uses `-Syu --needed` to update/upgrade and install.
+    """
     if not packages and not casks:
         return
 
@@ -247,12 +334,19 @@ def install_system_packages(ctx: Context, packages: list[str], *, casks: list[st
 
 
 def install_pip_packages(ctx: Context, packages: list[str]) -> None:
+    """Install Python packages into the user site-packages via `pip`."""
     if not packages:
         return
     run(["python3", "-m", "pip", "install", "--user", *packages], dry_run=ctx.dry_run)
 
 
 def install_pipx_packages(ctx: Context, items: list[Any]) -> None:
+    """Install applications via `pipx`.
+
+    Supported entry forms:
+      - "package-name"
+      - {"name": "package-name", "python": "python3.12"}
+    """
     if not items:
         return
     pipx_cmd = shutil.which("pipx")
@@ -276,117 +370,14 @@ def install_pipx_packages(ctx: Context, items: list[Any]) -> None:
         raise TypeError(f"Unsupported pipx entry: {item!r}")
 
 
-def action_vim_dirs(ctx: Context, _: dict[str, Any]) -> None:
-    home = ensure_home_exists()
-    run(["mkdir", "-p", str(home / ".vim" / "swap"), str(home / ".vim" / "backup")], dry_run=ctx.dry_run)
-
-
-def action_vim_plug(ctx: Context, _: dict[str, Any]) -> None:
-    home = ensure_home_exists()
-    dest = home / ".vim" / "autoload" / "plug.vim"
-    if dest.exists():
-        return
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    run(
-        [
-            "curl",
-            "-fLo",
-            str(dest),
-            "--create-dirs",
-            "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
-        ],
-        dry_run=ctx.dry_run,
-    )
-
-
-def action_tmux_config(ctx: Context, _: dict[str, Any]) -> None:
-    home = ensure_home_exists()
-    tmux_dir = home / ".tmux"
-    tpm_dir = home / ".tmux" / "plugins" / "tpm"
-    if not tmux_dir.exists():
-        run(["git", "clone", "https://github.com/gpakosz/.tmux", str(tmux_dir)], dry_run=ctx.dry_run)
-    # Keep compatibility with the original script's symlink location.
-    run(["ln", "-sf", str(tmux_dir / ".tmux.conf"), str(home / ".tmux.conf")], dry_run=ctx.dry_run)
-    if not tpm_dir.exists():
-        tpm_dir.parent.mkdir(parents=True, exist_ok=True)
-        run(["git", "clone", "https://github.com/tmux-plugins/tpm", str(tpm_dir)], dry_run=ctx.dry_run)
-
-
-def action_docker_enable(ctx: Context, _: dict[str, Any]) -> None:
-    if platform_kind(ctx.platform_key) != "linux":
-        return
-    import getpass
-
-    user = os.environ.get("SUDO_USER") or os.environ.get("USER") or getpass.getuser()
-    if user:
-        run(["sudo", "usermod", "-a", "-G", "docker", user], check=False, dry_run=ctx.dry_run)
-    if shutil.which("systemctl") is not None:
-        run(["sudo", "systemctl", "enable", "--now", "docker"], check=False, dry_run=ctx.dry_run)
-
-
-def action_rustup_toolchains(ctx: Context, config: dict[str, Any]) -> None:
-    rustup_cfg = config.get("rustup") or {}
-    if not isinstance(rustup_cfg, dict):
-        rustup_cfg = {}
-    install_url = rustup_cfg.get("install_url") or "https://sh.rustup.rs"
-    toolchains = rustup_cfg.get("toolchains") or ["stable", "nightly"]
-    if not isinstance(toolchains, list) or not all(isinstance(x, str) for x in toolchains):
-        toolchains = ["stable", "nightly"]
-
-    if shutil.which("rustup") is None:
-        run_bash(f"curl -sSf {install_url} | sh -s -- -y", dry_run=ctx.dry_run)
-
-    tc_install = " && ".join([f"rustup toolchain install {t}" for t in toolchains])
-    script = f"""
-        set -e
-        if [ -f "$HOME/.cargo/env" ]; then
-          . "$HOME/.cargo/env"
-        fi
-        rustup default stable || true
-        {tc_install}
-    """
-    run_bash(script, dry_run=ctx.dry_run)
-
-
-def action_nvm_node(ctx: Context, config: dict[str, Any]) -> None:
-    nvm_cfg = config.get("nvm") or {}
-    if not isinstance(nvm_cfg, dict):
-        nvm_cfg = {}
-    install_url = nvm_cfg.get("install_url") or "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh"
-    node_versions = nvm_cfg.get("node_versions") or {}
-    if not isinstance(node_versions, dict):
-        node_versions = {}
-    node_version = node_versions.get(ctx.platform_key) or node_versions.get(platform_kind(ctx.platform_key))
-    if not isinstance(node_version, (str, int, float)) or not str(node_version).strip():
-        raise RuntimeError(f"Missing node version for platform {ctx.platform_key}")
-    node_version = str(node_version)
-
-    nvm_dir = Path.home() / ".nvm"
-    nvm_sh = nvm_dir / "nvm.sh"
-    if not nvm_sh.exists():
-        run_bash(f"curl -sSfL {install_url} | bash", dry_run=ctx.dry_run)
-
-    script = f"""
-        set -e
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-        nvm install {node_version}
-        nvm alias default {node_version}
-    """
-    run_bash(script, dry_run=ctx.dry_run)
-
-
-ACTIONS: dict[str, Any] = {
-    "vim_dirs": action_vim_dirs,
-    "vim_plug": action_vim_plug,
-    "tmux_config": action_tmux_config,
-    "docker_enable": action_docker_enable,
-    "rustup_toolchains": action_rustup_toolchains,
-    "nvm_node": action_nvm_node,
-}
+# --------------------------- Profile/Module Resolve --------------------------
 
 
 def resolve_profile_modules(data: dict[str, Any], names: list[str]) -> list[str]:
+    """Resolve a list of module/profile names into module names.
+
+    Profiles can include other profiles (nested) and/or modules.
+    """
     profiles = data.get("profiles") or {}
     modules = data.get("modules") or {}
     if not isinstance(profiles, dict) or not isinstance(modules, dict):
@@ -415,14 +406,54 @@ def resolve_profile_modules(data: dict[str, Any], names: list[str]) -> list[str]
     return uniq_keep_order(resolved)
 
 
+# ----------------------------------- CLI -----------------------------------
+
+
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="Install dependencies from setup/dependencies.yaml")
-    parser.add_argument("--platform", choices=["macos", "ubuntu", "manjaro"], help="Override platform detection")
-    parser.add_argument("--profile", default="default", help="Profile name from dependencies.yaml")
-    parser.add_argument("--module", action="append", default=[], help="Extra module(s) to include")
-    parser.add_argument("--dry-run", action="store_true", help="Print commands without running them")
-    parser.add_argument("--yes", action="store_true", help="Auto-confirm package manager prompts where supported")
-    parser.add_argument("--no-update", action="store_true", help="Skip package DB updates (brew/apt)")
+    parser = argparse.ArgumentParser(
+        description="Install dependencies from setup/dependencies.yaml",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Examples:\n"
+            "  # Install the default profile for this machine\n"
+            "  python3 setup/install.py --profile default\n"
+            "\n"
+            "  # Show what would be executed\n"
+            "  python3 setup/install.py --dry-run\n"
+            "\n"
+            "  # Add a module in addition to the profile\n"
+            "  python3 setup/install.py --profile default --module clangd\n"
+        ),
+    )
+    parser.add_argument(
+        "--platform",
+        choices=["macos", "ubuntu", "manjaro"],
+        help="Override platform detection (otherwise auto-detected)",
+    )
+    parser.add_argument(
+        "--profile",
+        default="default",
+        help="Profile name from dependencies.yaml (profiles expand to modules)",
+    )
+    parser.add_argument(
+        "--module",
+        action="append",
+        default=[],
+        help="Extra module(s) to include (repeatable)",
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Print commands without running them"
+    )
+    parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="Auto-confirm package manager prompts where supported (apt/pacman)",
+    )
+    parser.add_argument(
+        "--no-update",
+        action="store_true",
+        help="Skip package DB updates (brew/apt only)",
+    )
     args = parser.parse_args(argv)
 
     platform_key = args.platform or detect_platform()
@@ -467,7 +498,9 @@ def main(argv: list[str]) -> int:
                 raise TypeError(f"module {module_name}: packages must be a mapping")
             manager_entries = packages.get(ctx.manager) or []
             if not isinstance(manager_entries, list):
-                raise TypeError(f"module {module_name}: packages[{ctx.manager}] must be a list")
+                raise TypeError(
+                    f"module {module_name}: packages[{ctx.manager}] must be a list"
+                )
             pkg_entries.extend(manager_entries)
 
         cask_map = module.get("casks") or {}
@@ -476,8 +509,12 @@ def main(argv: list[str]) -> int:
                 raise TypeError(f"module {module_name}: casks must be a mapping")
             if ctx.manager == "brew":
                 brew_casks = cask_map.get("brew") or []
-                if not isinstance(brew_casks, list) or not all(isinstance(x, str) for x in brew_casks):
-                    raise TypeError(f"module {module_name}: casks.brew must be a list of strings")
+                if not isinstance(brew_casks, list) or not all(
+                    isinstance(x, str) for x in brew_casks
+                ):
+                    raise TypeError(
+                        f"module {module_name}: casks.brew must be a list of strings"
+                    )
                 casks.extend(brew_casks)
 
         pip_map = module.get("pip")
@@ -519,5 +556,5 @@ if __name__ == "__main__":
     try:
         raise SystemExit(main(sys.argv[1:]))
     except subprocess.CalledProcessError as e:
-        eprint(f"Command failed with exit code {e.returncode}: {e.cmd}")
+        error_print(f"Command failed with exit code {e.returncode}: {e.cmd}")
         raise

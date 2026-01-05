@@ -116,7 +116,7 @@ bootstrap_pyyaml() {
   if python3 -c "import yaml" >/dev/null 2>&1; then
     return 0
   fi
-  python3 -m pip install --user pyyaml
+  python3 -m pip install --user --break-system-packages pyyaml
 }
 
 # --------------------------------- Runner ----------------------------------

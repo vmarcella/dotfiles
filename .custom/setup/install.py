@@ -16,16 +16,15 @@ Supported platforms:
 from __future__ import annotations
 
 import argparse
-import getpass
-import os
 import platform as py_platform
-import shlex
 import shutil
 import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+
+from install_actions import ACTIONS
+from install_core import Context, platform_kind, run, shlex_join
 
 
 # ------------------------------ Output Helpers ------------------------------
@@ -46,56 +45,6 @@ except Exception:
 
 
 # ---------------------------- Command Execution -----------------------------
-
-
-def shlex_join(parts: list[str]) -> str:
-    """Shell-escape and join argv parts into a printable command string."""
-    return " ".join(shlex.quote(p) for p in parts)
-
-
-def run(
-    cmd: list[str],
-    *,
-    check: bool = True,
-    dry_run: bool = False,
-    env: dict[str, str] | None = None,
-) -> subprocess.CompletedProcess[str] | None:
-    """Run a command.
-
-    Args:
-        cmd: The command (argv-style).
-        check: If True, raise on non-zero exit codes.
-        dry_run: If True, print the command instead of executing it.
-        env: Optional environment override.
-
-    Returns:
-        The CompletedProcess if executed, or None if dry_run is True.
-    """
-    if dry_run:
-        print("+", shlex_join(cmd))
-        return None
-    return subprocess.run(cmd, check=check, text=True, env=env)
-
-
-def run_bash(
-    script: str,
-    *,
-    check: bool = True,
-    dry_run: bool = False,
-    env: dict[str, str] | None = None,
-) -> subprocess.CompletedProcess[str] | None:
-    """Run a bash snippet via `bash -lc`.
-
-    Args:
-        script: The bash to execute.
-        check: Whether to raise an exception on non-zero exit code.
-        dry_run: If True, print the command instead of executing it.
-        env: Optional environment variables to set for the command.
-
-    Returns:
-        The CompletedProcess instance if executed, or None if dry_run is True.
-    """
-    return run(["bash", "-lc", script], check=check, dry_run=dry_run, env=env)
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -161,21 +110,6 @@ def detect_platform() -> str:
     raise RuntimeError(
         f"Unsupported Linux distro: ID={distro_id!r} ID_LIKE={distro_like!r}"
     )
-
-
-def platform_kind(platform_key: str) -> str:
-    """Return the platform kind for a given platform key.
-
-    Args:
-        platform_key: The specific platform key (e.g., "ubuntu", "manjaro")
-
-    Returns:
-        The platform kind (e.g., "linux", "macos")
-
-    """
-    if platform_key in {"ubuntu", "manjaro"}:
-        return "linux"
-    return platform_key
 
 
 def manager_for_platform(platform_key: str) -> str:
@@ -268,38 +202,6 @@ def collect_selector_map(map_value: Any, *, platform_key: str) -> list[Any]:
 
 
 # ------------------------------ Install Context ------------------------------
-
-
-@dataclass(frozen=True)
-class Context:
-    """Context for installation operations.
-
-    Properties:
-        platform_key: The platform key
-        manager: The package manager
-        repo_root: The root path of the repository
-        dry_run: Whether to perform a dry run
-        yes: Whether to auto-confirm prompts
-        do_update: Whether to update package DBs
-    """
-
-    platform_key: str
-    manager: str
-    repo_root: Path
-    dry_run: bool
-    yes: bool
-    do_update: bool
-
-
-def ensure_home_exists() -> Path:
-    """Ensure the user's home directory exists.
-
-    Returns:
-        The Path to the user's home directory.
-    """
-    home = Path.home()
-    home.mkdir(parents=True, exist_ok=True)
-    return home
 
 
 def pkg_exists(ctx: Context, pkg_name: str) -> bool:
@@ -467,156 +369,6 @@ def install_pipx_packages(ctx: Context, items: list[Any]) -> None:
             run(cmd, dry_run=ctx.dry_run)
             continue
         raise TypeError(f"Unsupported pipx entry: {item!r}")
-
-
-# --------------------------------- Actions ---------------------------------
-
-
-def action_vim_dirs(ctx: Context, _: dict[str, Any]) -> None:
-    """Create Vim/Neovim swap/backup directories."""
-    home = ensure_home_exists()
-    run(
-        ["mkdir", "-p", str(home / ".vim" / "swap"), str(home / ".vim" / "backup")],
-        dry_run=ctx.dry_run,
-    )
-
-
-def action_vim_plug(ctx: Context, _: dict[str, Any]) -> None:
-    """Install vim-plug if not already present."""
-    home = ensure_home_exists()
-    dest = home / ".vim" / "autoload" / "plug.vim"
-    if dest.exists():
-        return
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    run(
-        [
-            "curl",
-            "-fLo",
-            str(dest),
-            "--create-dirs",
-            "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
-        ],
-        dry_run=ctx.dry_run,
-    )
-
-
-def action_tmux_config(ctx: Context, _: dict[str, Any]) -> None:
-    """Install gpakosz/.tmux and TPM, then link `~/.tmux.conf`."""
-    home = ensure_home_exists()
-    tmux_dir = home / ".tmux"
-    tpm_dir = home / ".tmux" / "plugins" / "tpm"
-    if not tmux_dir.exists():
-        run(
-            ["git", "clone", "https://github.com/gpakosz/.tmux", str(tmux_dir)],
-            dry_run=ctx.dry_run,
-        )
-    # Keep compatibility with the original script's symlink location.
-    run(
-        ["ln", "-sf", str(tmux_dir / ".tmux.conf"), str(home / ".tmux.conf")],
-        dry_run=ctx.dry_run,
-    )
-    if not tpm_dir.exists():
-        tpm_dir.parent.mkdir(parents=True, exist_ok=True)
-        run(
-            ["git", "clone", "https://github.com/tmux-plugins/tpm", str(tpm_dir)],
-            dry_run=ctx.dry_run,
-        )
-
-
-def action_docker_enable(ctx: Context, _: dict[str, Any]) -> None:
-    """Enable Docker on Linux (group membership + systemd enable/start)."""
-    if platform_kind(ctx.platform_key) != "linux":
-        return
-
-    user = os.environ.get("SUDO_USER") or os.environ.get("USER") or getpass.getuser()
-
-    if user:
-        run(
-            ["sudo", "usermod", "-a", "-G", "docker", user],
-            check=False,
-            dry_run=ctx.dry_run,
-        )
-    if shutil.which("systemctl") is not None:
-        run(
-            ["sudo", "systemctl", "enable", "--now", "docker"],
-            check=False,
-            dry_run=ctx.dry_run,
-        )
-
-
-def action_rustup_toolchains(ctx: Context, config: dict[str, Any]) -> None:
-    """Ensure rustup exists and install configured toolchains."""
-    rustup_cfg = config.get("rustup") or {}
-
-    if not isinstance(rustup_cfg, dict):
-        rustup_cfg = {}
-
-    install_url = rustup_cfg.get("install_url") or "https://sh.rustup.rs"
-    toolchains = rustup_cfg.get("toolchains") or ["stable", "nightly"]
-
-    if not isinstance(toolchains, list) or not all(
-        isinstance(x, str) for x in toolchains
-    ):
-        toolchains = ["stable", "nightly"]
-
-    if shutil.which("rustup") is None:
-        run_bash(f"curl -sSf {install_url} | sh -s -- -y", dry_run=ctx.dry_run)
-
-    tc_install = " && ".join([f"rustup toolchain install {t}" for t in toolchains])
-    script = f"""
-        set -e
-        if [ -f "$HOME/.cargo/env" ]; then
-          . "$HOME/.cargo/env"
-        fi
-        rustup default stable || true
-        {tc_install}
-    """
-
-    run_bash(script, dry_run=ctx.dry_run)
-
-
-def action_nvm_node(ctx: Context, config: dict[str, Any]) -> None:
-    """Ensure nvm exists and install the configured Node version."""
-    nvm_cfg = config.get("nvm") or {}
-    if not isinstance(nvm_cfg, dict):
-        nvm_cfg = {}
-    install_url = (
-        nvm_cfg.get("install_url")
-        or "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh"
-    )
-    node_versions = nvm_cfg.get("node_versions") or {}
-    if not isinstance(node_versions, dict):
-        node_versions = {}
-    node_version = node_versions.get(ctx.platform_key) or node_versions.get(
-        platform_kind(ctx.platform_key)
-    )
-    if not isinstance(node_version, (str, int, float)) or not str(node_version).strip():
-        raise RuntimeError(f"Missing node version for platform {ctx.platform_key}")
-    node_version = str(node_version)
-
-    nvm_dir = Path.home() / ".nvm"
-    nvm_sh = nvm_dir / "nvm.sh"
-    if not nvm_sh.exists():
-        run_bash(f"curl -sSfL {install_url} | bash", dry_run=ctx.dry_run)
-
-    script = f"""
-        set -e
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-        nvm install {node_version}
-        nvm alias default {node_version}
-    """
-    run_bash(script, dry_run=ctx.dry_run)
-
-
-ACTIONS: dict[str, Any] = {
-    "vim_dirs": action_vim_dirs,
-    "vim_plug": action_vim_plug,
-    "tmux_config": action_tmux_config,
-    "docker_enable": action_docker_enable,
-    "rustup_toolchains": action_rustup_toolchains,
-    "nvm_node": action_nvm_node,
-}
 
 
 # --------------------------- Profile/Module Resolve --------------------------
