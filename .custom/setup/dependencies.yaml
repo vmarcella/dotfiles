@@ -1,0 +1,248 @@
+version: 1
+
+# Data-driven dependency definitions used by `setup/install.py`.
+#
+# Shape:
+# - `profiles.<name>.modules`: a list of module/profile names to include.
+# - `modules.<name>`: a unit of installable items (system packages, pip/pipx,
+#   and/or scripted actions).
+# - `config`: shared variables consumed by actions (e.g. nvm/rustup URLs).
+#
+# System packages:
+# - Keys under `modules.*.packages` map to a package manager: `brew`, `apt`,
+#   `pacman`.
+# - Special entry: `{ any_of: ["pkg-a", "pkg-b"] }` chooses the first available.
+#
+# Selectors:
+# - Keys under `modules.*.(actions|pip|pipx)` are selectors: `all`, `linux`,
+#   `macos`, `ubuntu`, `manjaro`.
+
+# ------------------------------- Profiles -----------------------------------
+
+profiles:
+  default:
+    modules:
+      - base
+      - shell
+      - editors
+      - tmux
+      - docker
+      - languages-python
+      - languages-rust
+      - languages-node
+      - languages-go
+      - languages-java
+      - clangd
+      - cloud
+
+  manjaro-desktop:
+    modules:
+      - default
+      - desktop-manjaro
+
+# -------------------------------- Config ------------------------------------
+
+config:
+  nvm:
+    install_url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh
+    node_versions:
+      macos: 18.13.0
+      ubuntu: 16.15.0
+      manjaro: "16"
+  rustup:
+    install_url: https://sh.rustup.rs
+    toolchains:
+      - stable
+      - nightly
+
+# -------------------------------- Modules -----------------------------------
+
+modules:
+  # Common build/system dependencies used across environments.
+  base:
+    packages:
+      brew:
+        - cmake
+        - ninja
+        - keychain
+        - ripgrep
+        - tree
+      apt:
+        - apt-transport-https
+        - autoconf
+        - build-essential
+        - cmake
+        - curl
+        - g++
+        - git
+        - libgflags-dev
+        - libglu1-mesa-dev
+        - libssl-dev
+        - libtool
+        - make
+        - pkg-config
+        - ripgrep
+        - tree
+        - wget
+        - xclip
+        - xorg-dev
+      pacman:
+        - autoconf
+        - base-devel
+        - cmake
+        - curl
+        - gcc
+        - git
+        - git-lfs
+        - libtool
+        - make
+        - mesa
+        - openssl
+        - pkg-config
+        - ripgrep
+        - tree
+        - wget
+        - xclip
+        - xorg-server
+
+  # Shell defaults and session tools.
+  shell:
+    packages:
+      apt:
+        - zsh
+        - keychain
+      pacman:
+        - zsh
+        - keychain
+
+  # Editors and related configuration.
+  editors:
+    packages:
+      brew:
+        - neovim
+      apt:
+        - neovim
+      pacman:
+        - vim
+        - neovim
+    casks:
+      brew:
+        - visual-studio-code
+        - iterm2
+    pip:
+      all:
+        - neovim
+    actions:
+      all:
+        - vim_dirs
+        - vim_plug
+
+  # tmux + common config/plugins.
+  tmux:
+    packages:
+      brew:
+        - tmux
+      apt:
+        - tmux
+      pacman:
+        - tmux
+    actions:
+      all:
+        - tmux_config
+
+  # Docker engine (Linux) or Docker Desktop (macOS).
+  docker:
+    packages:
+      apt:
+        - docker.io
+      pacman:
+        - docker
+    casks:
+      brew:
+        - docker
+    actions:
+      linux:
+        - docker_enable
+
+  # C/C++ language server; package name varies by distro/version.
+  clangd:
+    packages:
+      apt:
+        - any_of:
+            - clangd
+            - clangd-10
+      pacman:
+        - clang
+
+  # Cloud tooling (currently macOS-focused).
+  cloud:
+    packages:
+      brew:
+        - azure-cli
+
+  # Language toolchains.
+  languages-python:
+    packages:
+      brew:
+        - python@3.13
+        - python@3.12
+        - python-setuptools
+        - pipx
+      apt:
+        - python3-dev
+        - python3-pip
+        - python3-venv
+        - pipx
+      pacman:
+        - python
+        - python-pip
+        - python-pipx
+    pip:
+      macos:
+        - poetry
+      linux:
+        - virtualenv
+        - virtualenvwrapper
+    pipx:
+      macos:
+        - name: aider
+          python: python3.12
+
+  languages-rust:
+    packages:
+      pacman:
+        - rustup
+    actions:
+      all:
+        - rustup_toolchains
+
+  languages-node:
+    actions:
+      all:
+        - nvm_node
+
+  languages-go:
+    packages:
+      brew:
+        - go
+      apt:
+        - golang-go
+      pacman:
+        - go
+
+  languages-java:
+    packages:
+      apt:
+        - default-jdk
+      pacman:
+        - jre-openjdk
+
+  # Manjaro-only desktop apps/utilities.
+  desktop-manjaro:
+    packages:
+      pacman:
+        - blueman
+        - discord
+        - doxygen
+        - graphviz
+        - pavucontrol
