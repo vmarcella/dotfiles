@@ -19,7 +19,7 @@ Common options:
 
 Notes:
 
-- `bash ./setup/install.sh` bootstraps PyYAML (via `pip --user`) if needed.
+- `bash ./setup/install.sh` bootstraps PyYAML (via a small venv) if needed.
 - Some steps require `sudo` (apt/pacman installs, docker enablement).
 
 ## Profiles

@@ -1,4 +1,9 @@
 .dotfiles
 .dotfiles
 
+# Macos specific files
+.DS_Store
+
+# Python cache files
 __pycache__/
+

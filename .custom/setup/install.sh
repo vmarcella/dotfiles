@@ -6,13 +6,14 @@ set -euo pipefail
 # Responsibilities:
 # - Detect platform (or honor `--platform <macos|ubuntu|manjaro>`).
 # - Ensure `python3` and `pip` exist (via brew/apt/pacman as needed).
-# - Ensure PyYAML exists (via `python3 -m pip install --user pyyaml`).
+# - Ensure PyYAML exists (prefer system python; otherwise use a small venv).
 # - Delegate to `setup/install.py` with the original arguments.
 #
 # Tip: use `--dry-run` to print the commands without executing them.
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+BOOTSTRAP_VENV="$REPO_ROOT/setup/.installer_venv"
 
 # ------------------------------ Platform Detect ------------------------------
 
@@ -76,7 +77,7 @@ bootstrap_python() {
       ;;
     ubuntu)
       sudo apt-get update
-      sudo apt-get install -y python3 python3-pip
+      sudo apt-get install -y python3 python3-pip python3-venv
       ;;
     manjaro)
       sudo pacman -Syu --needed python python-pip
@@ -100,7 +101,7 @@ bootstrap_pip() {
       ;;
     ubuntu)
       sudo apt-get update
-      sudo apt-get install -y python3-pip
+      sudo apt-get install -y python3-pip python3-venv
       ;;
     manjaro)
       sudo pacman -Syu --needed python-pip
@@ -113,10 +114,21 @@ bootstrap_pip() {
 }
 
 bootstrap_pyyaml() {
+  # Prefer the system python if it already has PyYAML available.
   if python3 -c "import yaml" >/dev/null 2>&1; then
+    INSTALL_PYTHON="python3"
     return 0
   fi
-  python3 -m pip install --user --break-system-packages pyyaml
+
+  # Otherwise, create a small venv used only to run the installer.
+  # This avoids PEP 668 issues on some systems (notably Homebrew Python).
+  if [[ ! -x "$BOOTSTRAP_VENV/bin/python" ]]; then
+    python3 -m venv "$BOOTSTRAP_VENV"
+  fi
+
+  "$BOOTSTRAP_VENV/bin/python" -m pip install --upgrade pip >/dev/null
+  "$BOOTSTRAP_VENV/bin/python" -m pip install pyyaml >/dev/null
+  INSTALL_PYTHON="$BOOTSTRAP_VENV/bin/python"
 }
 
 # --------------------------------- Runner ----------------------------------
@@ -136,4 +148,4 @@ bootstrap_python "$platform"
 bootstrap_pip "$platform"
 bootstrap_pyyaml
 
-exec python3 "$REPO_ROOT/setup/install.py" "$@"
+exec "${INSTALL_PYTHON:-python3}" "$REPO_ROOT/setup/install.py" "$@"

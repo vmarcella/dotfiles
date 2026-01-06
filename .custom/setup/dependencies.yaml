@@ -63,11 +63,18 @@ modules:
   base:
     packages:
       brew:
+        - autoconf
         - cmake
+        - curl
+        - git
+        - git-lfs
+        - libtool
         - ninja
         - keychain
+        - pkg-config
         - ripgrep
         - tree
+        - wget
       apt:
         - apt-transport-https
         - autoconf
@@ -76,11 +83,13 @@ modules:
         - curl
         - g++
         - git
+        - git-lfs
         - libgflags-dev
         - libglu1-mesa-dev
         - libssl-dev
         - libtool
         - make
+        - ninja-build
         - pkg-config
         - ripgrep
         - tree
@@ -109,6 +118,8 @@ modules:
   # Shell defaults and session tools.
   shell:
     packages:
+      brew:
+        - zsh
       apt:
         - zsh
         - keychain
@@ -165,6 +176,10 @@ modules:
   # C/C++ language server; package name varies by distro/version.
   clangd:
     packages:
+      brew:
+        - any_of:
+            - clangd
+            - llvm
       apt:
         - any_of:
             - clangd
@@ -176,6 +191,9 @@ modules:
   cloud:
     packages:
       brew:
+        - azure-cli
+    pipx:
+      ubuntu:
         - azure-cli
 
   # OpenAI Codex CLI:
@@ -243,6 +261,9 @@ modules:
         - default-jdk
       pacman:
         - jre-openjdk
+    casks:
+      brew:
+        - temurin
 
   # Manjaro-only desktop apps/utilities.
   desktop-manjaro:
