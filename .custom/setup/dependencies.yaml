@@ -232,6 +232,8 @@ modules:
       all:
         - name: poetry
           python: python3.13
+        - name: uv
+          python: python3.13
 
   languages-rust:
     packages:
